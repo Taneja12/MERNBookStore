@@ -1,8 +1,6 @@
-// client/services/api.js
-
 import axios from 'axios';
 
-const BASE_URL = 'https://mern-book-store-gilt.vercel.app'; // Adjust port if necessary
+const BASE_URL ="https://mern-book-store-gilt.vercel.app"; // Use the production base URL
 
 export const fetchBooks = async ({ page = 1, pageSize = 10 } = {}) => {
   try {
@@ -12,81 +10,81 @@ export const fetchBooks = async ({ page = 1, pageSize = 10 } = {}) => {
     return response.data;
   } catch (error) {
     console.error('Error fetching books:', error);
-    throw error; // Optional: Rethrow or handle the error as needed
+    throw error;
   }
 };
-
 
 export const fetchBookDetails = async (id) => {
   try {
     const response = await axios.get(`${BASE_URL}/api/books/${id}`);
-    return response.data; // Assuming your API returns book details as JSON
+    return response.data;
   } catch (error) {
     console.error(`Error fetching book with ID ${id}:`, error);
-    throw error; // Optional: Rethrow or handle the error as needed
+    throw error;
   }
 };
-
 
 export const searchBooksByTitle = async (title) => {
   try {
-    const response = await axios.get(`${BASE_URL}/api/books/search?title=${title}`);
-    return response.data; // Assuming your API returns search results as JSON
+    const response = await axios.get(`${BASE_URL}/api/books/search`, {
+      params: { title }
+    });
+    return response.data;
   } catch (error) {
     console.error(`Error searching books with title ${title}:`, error);
-    throw error; // Optional: Rethrow or handle the error as needed
+    throw error;
   }
 };
-
 
 export const fetchBooksByCategory = async (category) => {
   try {
     const response = await axios.get(`${BASE_URL}/api/category/${category}`);
-    return response.data; // Assuming your API returns books filtered by category
+    return response.data;
   } catch (error) {
     console.error(`Error fetching books by category ${category}:`, error);
     throw error;
   }
 };
 
-
 export const fetchUserDetails = async () => {
   const token = localStorage.getItem('token');
-
   if (!token) {
     throw new Error('No token found');
   }
-
-  const response = await axios.get('http://localhost:5000/api/auth/user', {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  return response.data;
+  try {
+    const response = await axios.get(`${BASE_URL}/api/auth/user`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching user details:', error);
+    throw error;
+  }
 };
-
 
 export const loginUser = async (username, password) => {
-  const response = await axios.post('http://localhost:5000/api/auth/login', { username, password });
-  return response.data;
+  try {
+    const response = await axios.post(`${BASE_URL}/api/auth/login`, { username, password });
+    return response.data;
+  } catch (error) {
+    console.error('Error logging in:', error);
+    throw error;
+  }
 };
-
 
 export const fetchCartItems = async (userId) => {
   try {
-    const response = await axios.get(`http://localhost:5000/api/cart/${userId}`);
-    return response.data; // Assuming your response data directly contains the cart items
+    const response = await axios.get(`${BASE_URL}/api/cart/${userId}`);
+    return response.data;
   } catch (error) {
     console.error('Error fetching cart items:', error);
     throw error;
   }
 };
 
-
 export const addToCart = async (userId, bookId, quantity) => {
   try {
-    const response = await axios.post(`http://localhost:5000/api/cart/add-to-cart`, {
+    const response = await axios.post(`${BASE_URL}/api/cart/add-to-cart`, {
       userId,
       bookId,
       quantity
@@ -98,10 +96,9 @@ export const addToCart = async (userId, bookId, quantity) => {
   }
 };
 
-
 export const removeCartItem = async (userId, bookId) => {
   try {
-    const response = await axios.delete(`http://localhost:5000/api/cart/${userId}/${bookId}`);
+    const response = await axios.delete(`${BASE_URL}/api/cart/${userId}/${bookId}`);
     return response.data;
   } catch (error) {
     console.error('Error removing cart item:', error);
@@ -109,26 +106,19 @@ export const removeCartItem = async (userId, bookId) => {
   }
 };
 
-
-// Function to create order in the backend
-export async function createOrder(sessionId, userId, cartItems) {
+export const createOrder = async (sessionId, userId, cartItems) => {
   try {
     const response = await axios.post(`${BASE_URL}/api/orders/new`, {
       sessionId,
       userId,
       cartItems,
     });
-
-    if (!response.data) {
-      throw new Error('Failed to create order');
-    }
-
     return response.data;
   } catch (error) {
     console.error('Error creating order:', error);
     throw error;
   }
-}
+};
 
 export const fetchOrders = async (userId) => {
   try {
@@ -140,13 +130,11 @@ export const fetchOrders = async (userId) => {
   }
 };
 
-
 export const fetchAllUsers = async () => {
+  const token = localStorage.getItem('token');
   try {
     const response = await axios.get(`${BASE_URL}/api/admin/users`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
+      headers: { Authorization: `Bearer ${token}` }
     });
     return response.data;
   } catch (error) {
@@ -155,13 +143,11 @@ export const fetchAllUsers = async () => {
   }
 };
 
-
 export const fetchAllOrders = async () => {
+  const token = localStorage.getItem('token');
   try {
     const response = await axios.get(`${BASE_URL}/api/admin/orders`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
+      headers: { Authorization: `Bearer ${token}` }
     });
     return response.data;
   } catch (error) {
@@ -169,7 +155,6 @@ export const fetchAllOrders = async () => {
     throw error;
   }
 };
-
 
 export const sendContactMessage = async (formData) => {
   try {
@@ -181,7 +166,6 @@ export const sendContactMessage = async (formData) => {
   }
 };
 
-
 export const fetchContactMessages = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/api/contact`);
@@ -192,15 +176,22 @@ export const fetchContactMessages = async () => {
   }
 };
 
-
 export const forgotPassword = async (email) => {
-  const response = await axios.post(`${BASE_URL}/api/auth/forgot-password`, {email} );
-  return response.data;
+  try {
+    const response = await axios.post(`${BASE_URL}/api/auth/forgot-password`, { email });
+    return response.data;
+  } catch (error) {
+    console.error('Error during password recovery:', error);
+    throw error;
+  }
 };
-
 
 export const resetPassword = async (token, newPassword) => {
-  const response = await axios.post(`${BASE_URL}/api/auth/reset-password`, { token, newPassword });
-  return response.data;
+  try {
+    const response = await axios.post(`${BASE_URL}/api/auth/reset-password`, { token, newPassword });
+    return response.data;
+  } catch (error) {
+    console.error('Error resetting password:', error);
+    throw error;
+  }
 };
-
