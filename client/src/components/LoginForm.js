@@ -1,4 +1,3 @@
-// src/components/LoginForm.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../services/api'; // Import the service function
@@ -44,6 +43,7 @@ const LoginForm = ({ setIsAuthenticated }) => {
             onChange={(e) => setUsername(e.target.value)}
             className="input-field"
             placeholder="Username"
+            required
           />
           <input
             type="password"
@@ -51,14 +51,21 @@ const LoginForm = ({ setIsAuthenticated }) => {
             onChange={(e) => setPassword(e.target.value)}
             className="input-field"
             placeholder="Password"
+            required
           />
           <button type="submit" className="button1">
             Login
           </button>
         </form>
         {error && <p className="error-message">{error}</p>}
-        <div className="forgot-password">
-          <a href="/forgot-password" className="forgot-password-link">Forgot your password?</a>
+        <div className="links-container">
+          <div className="forgot-password">
+            <a href="/forgot-password" className="forgot-password-link">Forgot your password?</a>
+          </div>
+          <div className="register-link">
+            <p className="register-text">Don't have an account?</p>
+            <a href="/register" className="register-link-text">Register</a>
+          </div>
         </div>
       </div>
     </div>

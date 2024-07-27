@@ -13,7 +13,7 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 67.2vh; /* Full viewport height */
-  padding: 0 1rem ;
+  padding: 0 1rem;
 }
 
 .form-wrapper {
@@ -86,18 +86,29 @@ h1 {
   font-size: 0.9rem; /* Slightly smaller font size */
 }
 
-.forgot-password {
-  margin-top: 15px; /* Increased spacing */
-  text-align: center;
+.links-container {
+  margin-top: 20px; /* Spacing for the links container */
+  text-align: center; /* Center align the links */
 }
 
-.forgot-password-link {
+.forgot-password,
+.register-link {
+  margin: 10px 0; /* Space between links */
+}
+
+.forgot-password-link,
+.register-link-text {
   color: #007bff; /* Link color */
   text-decoration: none;
-  font-size: 0.9em;
+  font-size: 0.9em; /* Font size for links */
   font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
-.forgot-password-link:hover {
+.forgot-password-link:hover,
+.register-link-text:hover {
   text-decoration: underline;
+}
+
+.register-text {
+  display: inline;
 }
