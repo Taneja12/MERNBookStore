@@ -115,7 +115,7 @@ function Navbar({ isAuthenticated, isAdmin, handleLogout }) {
                 </li>
                 <li>
                   <Link
-                    to="/your-orders"
+                    to="/orders"
                     className={`dropdown-link ${location.pathname === '/your-orders' ? 'active' : ''}`}
                     onClick={() => setMenuOpen(false)}
                   >

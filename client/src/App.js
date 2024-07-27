@@ -90,7 +90,7 @@ function App() {
             <Route path="/payment" element={<PaymentComponent />} />
             <Route path="/user" element={<UserProfile />} />
             <Route path='/cart' element={<Cart userId={userId} />} />
-            <Route path='/your-orders' element={<OrderList userId={userId} />} />
+            <Route path='/orders' element={<OrderList userId={userId} />} />
             <Route path="/admin" element={isAuthenticated && isAdmin ? <AdminDashboard /> : <Navigate to="/login" />} />
             <Route path="/contact" element={<ContactUs />} />
             <Route path="/forgot-password" element={isAuthenticated ? <Navigate to="/" />:<ForgotPassword />  }  />
