@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 5000;
 const corsOptions = {
   origin: 'https://mern-book-store-ajdb-frontend-deepanshu-tanejas-projects.vercel.app', // Frontend URL
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-api-version'],
   preflightContinue: false,
   optionsSuccessStatus: 204,
 };
