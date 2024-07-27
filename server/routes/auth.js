@@ -8,6 +8,8 @@ const User = require('../models/User');
 const authMiddleware = require('../middleware/authMiddleware');
 require('dotenv').config();
 
+const JWT_SECRET = process.env.JWT_SECRET;
+
 // Configure Nodemailer
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
@@ -38,7 +40,7 @@ router.post('/login', async (req, res) => {
     // Create JWT Token
     const token = jwt.sign(
       { userId: user._id, username: user.username },
-      process.env.JWT_SECRET,
+      JWT_SECRET,
       { expiresIn: '1h' }
     );
 
