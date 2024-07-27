@@ -139,6 +139,7 @@ router.put('/user', authMiddleware, async (req, res) => {
 // Route: POST /api/auth/forgot-password
 router.post('/forgot-password', async (req, res) => {
   const { email } = req.body;
+  console.log(email)
 
   try {
     const user = await User.findOne({ email });
