@@ -4,7 +4,7 @@ import cashfree from "./utils";
 const pay = (paymentSessionId) => {
   let checkoutOptions = {
     paymentSessionId: paymentSessionId,
-    returnUrl: "http://localhost:3000",
+    returnUrl: "https://mern-book-store-ajdb-frontend-deepanshu-tanejas-projects.vercel.app",
   };
 
   return cashfree.checkout(checkoutOptions)
