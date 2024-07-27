@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin: "https://mern-book-store-ajdb-frontend.vercel.app",
+  origin: ["https://mern-book-store-ajdb-frontend.vercel.app"],
   methods: ["POST", "GET"],
   credentials: true
 }));
