@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { fetchUserDetails } from '../services/api'; // Import the fetchUserDetails function
+import { fetchUserDetails, OrderCreation } from '../services/api'; // Import the OrderCreation function
 
 const PaymentComponent = ({ userId, cartItems, totalAmount, setSessionId, setUserDetails }) => {
   const [userEmail, setUserEmail] = useState(null);
@@ -26,12 +25,12 @@ const PaymentComponent = ({ userId, cartItems, totalAmount, setSessionId, setUse
     try {
       const token = localStorage.getItem('token');
       const orderData = {
-        orderId: `order_${userId}_${Date.now()}`, 
+        orderId: `order_${userId}_${Date.now()}`,
         orderAmount: totalAmount,
-        customer_id: userId, 
-        customerName: userName, 
-        customerEmail: userEmail, 
-        customerPhone: String(userPhone), 
+        customer_id: userId,
+        customerName: userName,
+        customerEmail: userEmail,
+        customerPhone: String(userPhone),
         cartItems: cartItems.map(item => ({
           bookId: item.bookId,
           quantity: item.quantity,
@@ -39,15 +38,8 @@ const PaymentComponent = ({ userId, cartItems, totalAmount, setSessionId, setUse
         })),
       };
 
-      const response = await axios.post('http://localhost:5000/api/orders/createOrder', orderData, {
-        headers: {
-          Authorization: `Bearer ${token}`, // Ensure Bearer token format
-          'Content-Type': 'application/json',
-          'x-api-version': '2023-08-01',
-        },
-      });
-
-      const { sessionId } = response.data;
+      const response = await OrderCreation(orderData, token); // Use the OrderCreation function
+      const { sessionId } = response;
       setSessionId(sessionId);
 
       const userDetails = {

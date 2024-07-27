@@ -122,6 +122,24 @@ export const createOrder = async (sessionId, userId, cartItems) => {
   }
 };
 
+
+export const OrderCreation = async (orderData, token) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/api/orders/createOrder`, orderData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'x-api-version': '2023-08-01',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error creating order:', error.response?.data || error.message);
+    throw error; // Re-throw the error to handle it further up the chain if needed
+  }
+};
+
+
 export const fetchOrders = async (userId) => {
   try {
     const response = await axios.get(`${BASE_URL}/api/orders/user/${userId}`);
