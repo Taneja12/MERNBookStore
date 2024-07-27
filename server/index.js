@@ -38,7 +38,9 @@ const cartRoutes = require('./routes/cartRouter');
 const adminRoutes = require('./routes/adminRoutes');
 const contactRouter = require('./routes/contactRouter');
 
-
+app.get('/', (req, res) => {
+  res.json('API is working!');
+});
 // Endpoint for books and categories
 app.use('/api/books', bookRouter);
 app.use('/api/category', catRouter);
