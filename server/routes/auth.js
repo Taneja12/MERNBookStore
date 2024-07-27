@@ -9,13 +9,13 @@ const authMiddleware = require('../middleware/authMiddleware');
 require('dotenv').config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
-
+const SENDEMAIL_PASS = process.env.SENDEMAIL_PASS
 // Configure Nodemailer
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
     user: 'deepanshutaneja762@gmail.com',
-    pass: process.env.SENDEMAIL_PASS,
+    pass: SENDEMAIL_PASS,
   },
 });
 
