@@ -18,10 +18,10 @@ const corsOptions = {
 // Middleware
 
 // forlocalhost
-app.use(cors())
+// app.use(cors())
 
 // For vercel
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 app.options('*', cors(corsOptions)); 
 
 
