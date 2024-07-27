@@ -1,0 +1,11 @@
+/* src/css/OrderPieChart.css */
+.pie-chart-container {
+  max-width: 600px; /* Adjust the max width as needed */
+  margin: 0 auto; /* Center the chart */
+  justify-content: center;
+}
+
+.pie-chart-container canvas {
+  width: 50% !important;
+  height: auto !important;
+}

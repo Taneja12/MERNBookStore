@@ -1,0 +1,260 @@
+/* Global styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  min-height: 100vh;
+}
+
+.background-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('https://images.pexels.com/photos/7381555/pexels-photo-7381555.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: blur(5px);
+  z-index: -1;
+}
+
+/* Book details container */
+.book-details {
+  display: flex;
+  justify-content: space-between;
+  max-width: 85%;
+  margin: 60px auto;
+  padding: 20px;
+  background-color: rgba(35, 34, 34, 0.8); /* Semi-transparent dark background */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow */
+  border-radius: 8px;
+  color: #fff;
+  z-index: 1;
+  position: relative;
+  transition: background-color 0.3s ease; /* Transition background color */
+}
+
+/* Book details image */
+.book-details-image {
+  width: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center horizontally */
+}
+
+.book-details-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: contain; /* Ensure images maintain aspect ratio and fit within container */
+}
+
+/* Book details content */
+.book-details-content {
+  width: 70%; /* Adjusted width for content */
+  padding-left: 20px;
+}
+
+.book-details-content h2 {
+  margin: 10px 0;
+  font-size: 2rem;
+  font-family: 'Times New Roman', Times, serif; /* Example font change */
+}
+
+.book-details-content hr {
+  margin: 10px 0;
+  border: none;
+  border-top: 1px solid #ccc;
+}
+
+/* Description */
+.description {
+  max-height: 50vh; /* Initial max height for description */
+  overflow: hidden;
+  transition: max-height 0.3s ease; /* Smooth transition */
+}
+
+.description p{
+  font-size: large;
+}
+
+.description.expanded {
+  max-height: 1000px; /* Expand description to show full content */
+}
+
+/* Read more link */
+.read-more-link {
+  color: #4caf50; /* Green color */
+}
+
+.read-more-link:hover {
+  color: #2fa1c0; /* Darker green on hover */
+}
+
+/* Buy button container */
+.buy-button-container {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  text-align: center;
+}
+
+.buy-card {
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: auto;
+  color: #000; /* Dark text color for contrast */
+}
+
+.buy-button {
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  /* text-decoration: none; */
+  /* display: inline-block; */
+  margin-top: 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.buy-button:hover {
+  background-color: #2fa1c0;
+}
+
+/* Additional styles for BookDetails component */
+.book-details-content .author-genre-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.book-details-content .author-genre-row p {
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+/* Ensure description text matches author font size */
+.book-details-content .description p {
+  font-size: 14px;
+}
+
+
+.user-details-box {
+  background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+  border-radius: 12px; /* Rounded corners */
+  padding: 20px; /* Padding inside the box */
+  margin-top: 20px; /* Margin above the box */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Larger shadow for depth */
+  max-width: 400px; /* Limit the width of the box */
+  margin-left: auto; /* Center the box horizontally */
+  margin-right: auto; /* Center the box horizontally */
+  text-align: left; /* Align text to the left */
+  font-family: 'Arial', sans-serif; /* Use a clean, modern font */
+  color: #333; /* Darker text color for better readability */
+}
+
+.user-details-box h3 {
+  margin-top: 0;
+  font-size: 1.8rem; /* Slightly larger font size for the heading */
+  font-family: 'Helvetica Neue', Arial, sans-serif; /* Example font change */
+  color: black; /* Blue color for the heading */
+  border-bottom: 2px solid black; /* Border under the heading */
+  padding-bottom: 5px; /* Padding below the heading */
+}
+
+.user-details-box p {
+  font-size: 1rem; /* Standard font size */
+  margin-bottom: 10px; /* Space between paragraphs */
+}
+
+.buy-button-container {
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 450px;
+  margin: 0 auto;
+}
+
+
+
+.buy-button:hover {
+  background-color: rgb(109, 108, 108); /* Darker blue on hover */
+  color: white;
+}
+
+.payment-status {
+  margin-top: 10px;
+  font-size: 1rem;
+  color: #28a745; /* Green text */
+}
+.quantity-add-to-cart-container {
+  display: flex;
+  align-items: baseline;
+  margin-top: 20px;
+}
+
+
+
+.add-to-cart-button {
+  margin-top: 10px;
+  background-color: black; /* Red color for add to cart button */
+  color: white;
+  border: 1px white solid;
+  padding: 7px 20px;
+  font-size: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-left: 15px;
+}
+
+.add-to-cart-button:hover {
+  background-color: white; /* Darker red on hover */
+  color: black;
+
+}
+
+.quantity-input {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.quantity-input label {
+  margin-right: 5px;
+}
+
+.quantity-input select {
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+  /* Media query for smaller screens */
+  @media (max-width: 768px) {
+    .book-details {
+      flex-direction: column; /* Stack elements vertically on small screens */
+      align-items: center; /* Center items horizontally */
+      padding: 10px; /* Reduced padding for smaller screens */
+    }
+    
+    .book-details-image {
+      width: 100%; /* Adjusted width for smaller screens */
+      margin-bottom: 20px;
+    }
+    
+    .book-details-content {
+      width: 100%; /* Full width on smaller screens */
+      padding-left: 0; /* No padding on smaller screens */
+      text-align: center; /* Center text content */
+    }
+    
+    .buy-button-container {
+      width: 100%; /* Full width on smaller screens */
+    }
+  }

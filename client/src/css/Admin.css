@@ -1,0 +1,45 @@
+.admin-page {
+  max-width: 600px;
+  margin: 10px auto;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  height: auto;
+}
+
+.admin-page h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.admin-page form {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-page label {
+  margin-bottom: 6px;
+}
+
+.admin-page select,
+.admin-page input,
+.admin-page textarea {
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.admin-page button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.admin-page button:hover {
+  background-color: #0056b3;
+}

@@ -1,0 +1,245 @@
+@import url('https://fonts.googleapis.com/css2?family=Bona+Nova+SC:ital,wght@0,400;0,700;1,400&display=swap');
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #181818;
+  color: #fff;
+  padding: 10px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 1000;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  margin-right: 200px;
+}
+
+.logo-image {
+  width: 40px;
+  height: auto;
+  margin-right: 10px;
+  /* Adjust margin as needed */
+  filter: brightness(0) invert(1);
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-nav {
+  display: flex;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-item {
+  margin-right: 15px;
+  position: relative;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #fff;
+  font-size: 16px;
+  /* Adjust font size as needed */
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #007bff;
+}
+
+.nav-link.active,
+.dropdown-link.active {
+  font-weight: bold;
+  border-bottom: 2px solid #ffffff;
+  /* Optional underline for active link */
+}
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown .dropdown-menu {
+  display: none;
+  position: absolute;
+  background-color: #444;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  list-style-type: none;
+  padding: 0;
+  border-radius: 4px;
+  min-width: 160px;
+  top: 100%;
+  left: 0;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-toggle {
+  cursor: pointer;
+}
+
+.dropdown-link {
+  display: block;
+  padding: 10px 15px;
+  color: #fff;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  display: flex;
+  /* Ensure flex layout for icon alignment */
+  align-items: center;
+  /* Center align items */
+}
+
+.dropdown-link:hover {
+  background-color: #666;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  border: 1px solid #fff;
+  background-color: #444;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-right: 10px;
+  width: 250px;
+  /* Adjust width as needed */
+}
+
+.search-input::placeholder {
+  color: #ccc;
+}
+
+.search-button {
+  background-color: #333;
+  color: white;
+  border: 1px solid white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+  background-color: #282828;
+}
+
+.logout-icon {
+  background-color: transparent;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+.logout-icon:hover {
+  color: #007bff;
+}
+
+.menu-toggle {
+  display: none;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.mr-2 {
+  margin-right: 8px;
+}
+
+
+
+@media screen and (max-width: 768px) {
+  .navbar-links {
+    flex-direction: column;
+    align-items: flex-start;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #333;
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 10px 0;
+    display: none;
+    z-index: 1000;
+  }
+
+  .navbar-links.active {
+    display: flex;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .nav-item {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .nav-link {
+    width: 100%;
+    padding: 10px 0;
+  }
+
+  .logout-icon {
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+  }
+
+  .dropdown .dropdown-menu {
+    width: 100%;
+    left: 0;
+  }
+
+  .search-container {
+    margin: 10px 0;
+    justify-content: center;
+    justify-content: center;
+  }
+
+  .navbar-logo {
+    margin-right: 0;
+  }
+
+  .search-input {
+    width: 200px;
+    /* Adjust width for smaller screens */
+  }
+}
+
+/* Extra small screens */
+@media screen and (max-width: 480px) {
+  .search-input {
+    width: 150px;
+    /* Adjust width for extra small screens */
+  }
+
+  .nav-link {
+    font-size: 14px;
+    /* Adjust font size for extra small screens */
+  }
+}

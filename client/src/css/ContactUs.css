@@ -1,0 +1,142 @@
+/* src/components/ContactUs.css */
+.contact-us-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 67.2vh;
+  padding: 2rem;
+  background: url('https://images.pexels.com/photos/7381555/pexels-photo-7381555.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2') no-repeat center center;
+  background-size: cover;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.contact-us {
+  width: 100%;
+  max-width: 500px;
+  z-index: 1;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: rgba(8, 8, 8, 0.8);
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Enhanced shadow for depth */
+  overflow: hidden;
+  box-sizing: border-box;
+  animation: fadeIn 0.5s ease-in-out; /* Faster fade-in */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.contact-us h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  color: #fff;
+}
+
+.contact-us form div {
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.contact-us input,
+.contact-us textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s;
+  background-color: rgba(255, 255, 255, 0.9); /* Lighter background for inputs */
+}
+
+.contact-us input:focus,
+.contact-us textarea:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  outline: none;
+  background-color: rgba(255, 255, 255, 1);
+}
+
+.contact-us textarea {
+  resize: vertical;
+  min-height: 150px;
+}
+
+.contact-us button {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #222;
+  color: white;
+  border: 1px solid white;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+  font-size: 1rem;
+}
+
+.contact-us button:hover {
+  background-color: #000;
+  transform: translateY(-2px);
+}
+
+.contact-us button:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.contact-us input::placeholder,
+.contact-us textarea::placeholder {
+  color: #888;
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .contact-us-container {
+    padding: 1.5rem;
+  }
+
+  .contact-us {
+    padding: 1.5rem;
+  }
+
+  .contact-us h2 {
+    font-size: 1.75rem;
+  }
+
+  .contact-us button {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-us-container {
+    padding: 1rem;
+  }
+
+  .contact-us {
+    padding: 1rem;
+    margin: 10px;
+  }
+
+  .contact-us h2 {
+    font-size: 1.5rem;
+  }
+
+  .contact-us input,
+  .contact-us textarea,
+  .contact-us button {
+    padding: 0.5rem;
+  }
+}

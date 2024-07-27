@@ -1,0 +1,70 @@
+.book-card-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.book-card {
+  width: 220px; /* Fixed width for each book card */
+  height: 350px; /* Fixed height for each book card */
+  /* margin: 10px; Adjust margin as needed */
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px; /* Optional: Add border-radius for rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add shadow for depth */
+  transition: transform 0.2s ease-in-out; /* Optional: Add smooth transform on hover */
+}
+
+.book-card:hover {
+  transform: translateY(-5px); /* Optional: Lift the card on hover */
+}
+
+.book-image-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.book-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensure the image covers the container */
+  display: block;
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%);
+  background-blend-mode: multiply;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.book-card:hover .overlay {
+  opacity: 1; /* Show overlay on hover */
+}
+
+.overlay-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px;
+  text-align: center;
+  color: #fff;
+  opacity: 1; /* Initially hide content */
+  transition: opacity 0.3s ease;
+}
+
+.book-card:hover .overlay-content {
+  opacity: 1; /* Show content on hover */
+}
+
+.overlay-content h2 {
+  margin-bottom: 5px;
+  font-size: 1.2rem;
+}

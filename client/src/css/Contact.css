@@ -1,0 +1,23 @@
+/* src/css/ContactMessages.css */
+.contact-messages {
+  padding: 20px;
+}
+
+.contact-list {
+  list-style: none;
+  padding: 0;
+}
+
+.contact-item {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.contact-details h3 {
+  margin: 0;
+}
+
+.contact-details p {
+  margin: 5px 0;
+}

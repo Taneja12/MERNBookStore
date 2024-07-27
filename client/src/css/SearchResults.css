@@ -1,0 +1,49 @@
+/* Ensure this file is imported in your component */
+
+.search-results {
+  position: relative;
+  padding: 20px;
+  color: black; /* Example text color */
+  z-index: 1;
+}
+
+.search-results h2 {
+  text-align: center;
+  font-size: 1.5rem; /* Adjust font size as needed */
+  margin-bottom: 20px;
+}
+
+.books-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(205px, 1fr));
+  gap: 20px; /* Space between book items */
+  justify-content: center;
+}
+
+.books-container .book-item {
+  text-align: center;
+  background-color: transparent; /* Ensure no background color */
+  border: none; /* Ensure no borders */
+  padding: 0; /* Ensure no padding */
+}
+
+.books-container .book-item img {
+  max-width: 100%;
+  height: auto;
+}
+
+.books-container .book-item h2 {
+  margin-top: 10px;
+  font-size: 1.2rem; /* Example font size */
+}
+
+.books-container .book-item p {
+  margin: 5px 0;
+}
+
+.books-container .book-item a {
+  display: block;
+  margin-top: 10px;
+  color: #007bff;
+  text-decoration: none;
+}
