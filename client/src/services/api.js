@@ -2,7 +2,7 @@
 
 import axios from 'axios';
 
-const BASE_URL = 'https://mern-book-store-gilt.vercel.app/'; // Adjust port if necessary
+const BASE_URL = 'https://mern-book-store-gilt.vercel.app'; // Adjust port if necessary
 
 export const fetchBooks = async ({ page = 1, pageSize = 10 } = {}) => {
   try {
