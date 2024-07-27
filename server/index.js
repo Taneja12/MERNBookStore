@@ -7,14 +7,24 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
-app.use(cors(
-  {
-  origin: "https://mern-book-store-ajdb-frontend-deepanshu-tanejas-projects.vercel.app",
+const corsOptions = {
+  origin: 'https://mern-book-store-ajdb-frontend-deepanshu-tanejas-projects.vercel.app', // Frontend URL
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  credentials: true
-}
-));
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+};
+
+// Middleware
+
+// forlocalhost
+app.use(cors())
+
+// For vercel
+// app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); 
+
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
