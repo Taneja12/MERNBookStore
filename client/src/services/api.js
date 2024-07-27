@@ -1,6 +1,8 @@
 import axios from 'axios';
 
 const BASE_URL ="https://mern-book-store-deepanshu-tanejas-projects.vercel.app"; // Use the production base URL
+// const BASE_URL = "http://localhost:5000"
+
 
 export const fetchBooks = async ({ page = 1, pageSize = 10 } = {}) => {
   try {
@@ -126,6 +128,23 @@ export const fetchOrders = async (userId) => {
     return response.data;
   } catch (error) {
     console.error('Error fetching orders:', error);
+    throw error;
+  }
+};
+
+export const updateUserDetails = async (username, email) => {
+  const token = localStorage.getItem('token');
+  try {
+    const response = await axios.put(
+      `${BASE_URL}/api/auth/user`,
+      { username, email },
+      {
+        headers: { Authorization: token },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error updating user data:', error);
     throw error;
   }
 };

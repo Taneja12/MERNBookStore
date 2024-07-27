@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { fetchUserDetails, updateUserDetails } from '../services/api'; // Adjust the path as needed
 import '../css/UserProfile.css';
 
 const UserProfile = () => {
@@ -13,20 +13,12 @@ const UserProfile = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const token = localStorage.getItem('token');
-
       try {
-        const response = await axios.get('http://localhost:5000/api/auth/user', {
-          headers: {
-            Authorization: token,
-          },
-        });
-
-        setUser(response.data);
-        setUsername(response.data.username);
-        setEmail(response.data.email);
+        const userData = await fetchUserDetails();
+        setUser(userData);
+        setUsername(userData.username);
+        setEmail(userData.email);
       } catch (error) {
-        console.error('Error fetching user data:', error);
         setError('Error fetching user data');
       }
     };
@@ -39,27 +31,13 @@ const UserProfile = () => {
   };
 
   const handleSave = async () => {
-    const token = localStorage.getItem('token');
     try {
-      const response = await axios.put(
-        'http://localhost:5000/api/auth/user',
-        {
-          username,
-          email,
-        },
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
-  
-      setUser(response.data);
+      const updatedUser = await updateUserDetails(username, email);
+      setUser(updatedUser);
       setEditing(false);
       setSuccessMessage('Profile Updated Successfully');
       setErrorMessage('');
-  
-      // Clear success message after a few seconds
+      
       setTimeout(() => {
         setSuccessMessage('');
       }, 3000);
@@ -67,29 +45,26 @@ const UserProfile = () => {
       if (error.response && error.response.status === 400) {
         setErrorMessage(error.response.data.message);
       } else {
-        console.error('Error updating user data:', error); // Optional: log other errors to console
         setErrorMessage('Error updating user data');
       }
     }
   };
-  
 
   const handleCancel = () => {
     setEditing(false);
-    // Reset username and email fields if needed
     setUsername(user.username);
     setEmail(user.email);
-    setErrorMessage(''); // Clear any previous error messages
+    setErrorMessage('');
   };
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
-    setErrorMessage(''); // Clear any previous error messages
+    setErrorMessage('');
   };
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
-    setErrorMessage(''); // Clear any previous error messages
+    setErrorMessage('');
   };
 
   if (error) {
@@ -133,7 +108,6 @@ const UserProfile = () => {
         </div>
       )}
       {successMessage && <div className="success-message">{successMessage}</div>}
-      {/* Display other user details as needed */}
     </div>
   );
 };
