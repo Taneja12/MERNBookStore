@@ -73,6 +73,19 @@ export const loginUser = async (username, password) => {
     throw error;
   }
 };
+export const registerUser = async (userData) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/api/auth/register`, userData, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error during user registration:', error.response?.data || error.message);
+    throw error; // Rethrow to handle further up the chain
+  }
+};
 
 export const fetchCartItems = async (userId) => {
   try {

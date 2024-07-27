@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { registerUser } from '../services/api'; // Import the registerUser function
 import '../css/RegisterForm.css';
 
 const RegisterForm = () => {
@@ -10,7 +10,7 @@ const RegisterForm = () => {
     username: '',
     email: '',
     password: '',
-    phone: '', // Add customerphone to state
+    phone: '', // Add phone to state
   });
 
   const [error, setError] = useState(''); // Add error state
@@ -25,21 +25,21 @@ const RegisterForm = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/register', {
+      const res = await registerUser({
         username,
         email,
         password,
-        phone, // Include customerphone in the request
+        phone, // Include phone in the request
       });
 
-      console.log(res.data); // Optional: handle success message
+      console.log(res); // Optional: handle success message
 
       // Redirect to login page after successful registration
       navigate('/login'); // Navigate to your login route
 
     } catch (err) {
-      console.error(err.response.data);
-      setError(err.response.data.msg || 'An error occurred during registration'); // Set error message
+      console.error(err.message);
+      setError(err.response?.data?.msg || 'An error occurred during registration'); // Set error message
     }
   };
 
