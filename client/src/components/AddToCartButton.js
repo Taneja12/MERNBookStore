@@ -1,28 +1,25 @@
-// components/AddToCartButton.js
-
+// AddToCartButton.js
 import React from 'react';
 import { addToCart } from '../services/api';
 import { Button } from 'react-bootstrap';
 
-const AddToCartButton = ({ userId, bookId, quantity, onSuccess, onError, onClick }) => {
+function AddToCartButton({ userId, bookId, quantity, onSuccess, onError, onClick }) {
   const handleAddToCart = async () => {
+    if (onClick) onClick();
+
     try {
-      const cartItem = await addToCart(userId, bookId, quantity);
-      onSuccess(cartItem);
+      await addToCart(userId, bookId, quantity);
+      if (onSuccess) onSuccess();
     } catch (error) {
-      onError(error);
+      if (onError) onError(error);
     }
   };
 
   return (
-    <Button
-      variant="secondary"
-      className="btn-block"
-      onClick={onClick || handleAddToCart}
-    >
+    <Button variant="secondary" onClick={handleAddToCart} className="btn-block">
       Add to Cart
     </Button>
   );
-};
+}
 
 export default AddToCartButton;
