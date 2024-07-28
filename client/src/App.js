@@ -4,7 +4,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import LoginForm from './components/LoginForm';
 import Home from './pages/Home';
 import AdminPage from './components/Admin';
-import Navbar from './components/Navbar';
+import CustomNavbar from './components/Navbar';
 import About from './components/About';
 import SearchResults from './components/SearchResults';
 import BookDetails from './components/BookDetails';
@@ -21,6 +21,8 @@ import ResetPassword from './components/ResetPassword';
 import Footer from './components/Footer'; // Import the Footer component
 import { fetchUserDetails } from './services/api';
 import {jwtDecode} from 'jwt-decode';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 
 function App() {
@@ -76,7 +78,7 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <Navbar isAuthenticated={isAuthenticated} isAdmin={isAdmin} handleLogout={handleLogout} />
+        <CustomNavbar isAuthenticated={isAuthenticated} isAdmin={isAdmin} handleLogout={handleLogout} />
         <div style={{ flex: 1 }}>
           <Routes>
             <Route path="/" element={<Home />} />

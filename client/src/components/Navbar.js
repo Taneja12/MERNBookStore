@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Navbar, Nav, NavDropdown, Form, FormControl, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSignOutAlt, faBars, faTimes, faUserCircle, faClipboardList, faCartShopping, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faSignOutAlt, faUserCircle, faClipboardList, faCartShopping, faPlus } from '@fortawesome/free-solid-svg-icons';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/Navbar.css';
 
-function Navbar({ isAuthenticated, isAdmin, handleLogout }) {
+function CustomNavbar({ isAuthenticated, isAdmin, handleLogout }) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -32,163 +33,78 @@ function Navbar({ isAuthenticated, isAdmin, handleLogout }) {
   ];
 
   return (
-    <nav className="navbar">
-      <div className="navbar-brand">
-        <Link to="/" className="navbar-logo">
-          <img
-            src="https://qwicky.pythonanywhere.com/media/images/DT1.png"
-            alt="Logo"
-            className="logo-image"
-          />
-        </Link>
-      </div>
-      <div className={`navbar-links ${menuOpen ? 'active' : ''}`}>
-        <ul className="navbar-nav">
-          <li className="nav-item">
-            <Link
-              to="/"
-              className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}
-              onClick={() => setMenuOpen(false)}
-            >
-              Home
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link
-              to="/about"
-              className={`nav-link ${location.pathname === '/about' ? 'active' : ''}`}
-              onClick={() => setMenuOpen(false)}
-            >
-              About
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link
-              to="/contact"
-              className={`nav-link ${location.pathname === '/contact' ? 'active' : ''}`}
-              onClick={() => setMenuOpen(false)}
-            >
-              Contact
-            </Link>
-          </li>
-          <li className="nav-item dropdown">
-            <div className="nav-link dropdown-toggle">Categories</div>
-            <ul className="dropdown-menu">
-              {categories.map((category) => (
-                <li key={category.id}>
-                  <Link
-                    to={`/category/${category.name}`}
-                    className={`dropdown-link ${location.pathname === `/category/${category.name}` ? 'active' : ''}`}
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    {category.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </li>
-          {isAuthenticated ? (
-            <li className="nav-item dropdown">
-              <div className="nav-link dropdown-toggle">
-                <FontAwesomeIcon icon={faUserCircle} className="mr-2" />
-              </div>
-              <ul className="dropdown-menu">
-                <li>
-                  <Link
-                    to="/user"
-                    className={`dropdown-link ${location.pathname === '/user' ? 'active' : ''}`}
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    <FontAwesomeIcon icon={faUserCircle} className="mr-2" />
-                    Profile
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/cart"
-                    className={`dropdown-link ${location.pathname === '/cart' ? 'active' : ''}`}
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    <FontAwesomeIcon icon={faCartShopping} className="mr-2" />
-                    Cart
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/orders"
-                    className={`dropdown-link ${location.pathname === '/your-orders' ? 'active' : ''}`}
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    <FontAwesomeIcon icon={faClipboardList} className="mr-2" />
-                    Your Orders
-                  </Link>
-                </li>
-                {isAdmin && (
-                  <li>
-                    <Link
-                      to="/addbook"
-                      className={`dropdown-link ${location.pathname === '/addbook' ? 'active' : ''}`}
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      <FontAwesomeIcon icon={faPlus} className="mr-2" />
-                      Add Books
-                    </Link>
-                  </li>
-                )}
-                {isAdmin && (
-                  <li>
-                    <Link
-                      to="/admin"
-                      className={`dropdown-link ${location.pathname === '/admin' ? 'active' : ''}`}
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      <FontAwesomeIcon icon={faClipboardList} className="mr-2" />
-                      Admin Dashboard
-                    </Link>
-                  </li>
-                )}
-                <li>
-                  <div
-                    className="dropdown-link"
-                    onClick={() => {
-                      handleLogout();
-                      setMenuOpen(false);
-                    }}
-                  >
-                    <FontAwesomeIcon icon={faSignOutAlt} className="mr-2" />
-                    Logout
-                  </div>
-                </li>
-              </ul>
-            </li>
-          ) : (
-            <li className="nav-item">
-              <Link to="/login" className={`nav-link ${location.pathname === '/login' ? 'active' : ''}`} onClick={() => setMenuOpen(false)}>
-                Login
-              </Link>
-            </li>
-          )}
-        </ul>
-      </div>
-      <div className="search-container">
-        <form onSubmit={handleSearchSubmit} className="search-form">
-          <input
+    <Navbar expand="lg" className="custom-navbar">
+      <Navbar.Brand as={Link} to="/">
+        <img
+          src="https://qwicky.pythonanywhere.com/media/images/DT1.png"
+          alt="Logo"
+          className="logo-image"
+        />
+      </Navbar.Brand>
+      <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      <Navbar.Collapse id="basic-navbar-nav">
+        <Nav className="mr-auto">
+          <Nav.Link as={Link} to="/" active={location.pathname === '/'}>Home</Nav.Link>
+          <Nav.Link as={Link} to="/about" active={location.pathname === '/about'}>About</Nav.Link>
+          <Nav.Link as={Link} to="/contact" active={location.pathname === '/contact'}>Contact</Nav.Link>
+          <NavDropdown title="Categories" id="basic-nav-dropdown">
+            {categories.map((category) => (
+              <NavDropdown.Item
+                key={category.id}
+                as={Link}
+                to={`/category/${category.name}`}
+                active={location.pathname === `/category/${category.name}`}
+              >
+                {category.name}
+              </NavDropdown.Item>
+            ))}
+          </NavDropdown>
+        </Nav>
+        <Form className="d-inline-flex search-form" onSubmit={handleSearchSubmit}>
+          <FormControl
             type="text"
             placeholder="Search books..."
+            className="mr-sm-2"
             value={searchQuery}
             onChange={handleSearchChange}
-            className="search-input"
           />
-          <button type="submit" className="search-button">
-            Search
-          </button>
-        </form>
-      </div>
-      <div className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
-        <FontAwesomeIcon icon={menuOpen ? faTimes : faBars} />
-      </div>
-    </nav>
+          <Button variant="outline-light" type="submit">Search</Button>
+        </Form>
+        {isAuthenticated ? (
+          <Nav>
+            <NavDropdown title={<FontAwesomeIcon icon={faUserCircle} />} id="user-nav-dropdown">
+              <NavDropdown.Item as={Link} to="/user" active={location.pathname === '/user'}>
+                <FontAwesomeIcon icon={faUserCircle} className="dropdown-icon" />Profile
+              </NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/cart" active={location.pathname === '/cart'}>
+                <FontAwesomeIcon icon={faCartShopping} className="dropdown-icon" />Cart
+              </NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/orders" active={location.pathname === '/your-orders'}>
+                <FontAwesomeIcon icon={faClipboardList} className="dropdown-icon" />Your Orders
+              </NavDropdown.Item>
+              {isAdmin && (
+                <>
+                  <NavDropdown.Item as={Link} to="/addbook" active={location.pathname === '/addbook'}>
+                    <FontAwesomeIcon icon={faPlus} className="dropdown-icon" />Add Books
+                  </NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/admin" active={location.pathname === '/admin'}>
+                    <FontAwesomeIcon icon={faClipboardList} className="dropdown-icon" />Admin Dashboard
+                  </NavDropdown.Item>
+                </>
+              )}
+              <NavDropdown.Item onClick={handleLogout}>
+                <FontAwesomeIcon icon={faSignOutAlt} className="dropdown-icon" />Logout
+              </NavDropdown.Item>
+            </NavDropdown>
+          </Nav>
+        ) : (
+          <Nav>
+            <Nav.Link as={Link} to="/login" active={location.pathname === '/login'}>Login</Nav.Link>
+          </Nav>
+        )}
+      </Navbar.Collapse>
+    </Navbar>
   );
 }
 
-export default Navbar;
+export default CustomNavbar;

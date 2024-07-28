@@ -2,8 +2,9 @@
 
 import React from 'react';
 import { addToCart } from '../services/api';
+import { Button } from 'react-bootstrap';
 
-const AddToCartButton = ({ userId, bookId, quantity, onSuccess, onError }) => {
+const AddToCartButton = ({ userId, bookId, quantity, onSuccess, onError, onClick }) => {
   const handleAddToCart = async () => {
     try {
       const cartItem = await addToCart(userId, bookId, quantity);
@@ -14,9 +15,13 @@ const AddToCartButton = ({ userId, bookId, quantity, onSuccess, onError }) => {
   };
 
   return (
-    <button className="add-to-cart-button" onClick={handleAddToCart}>
+    <Button
+      variant="secondary"
+      className="btn-block"
+      onClick={onClick || handleAddToCart}
+    >
       Add to Cart
-    </button>
+    </Button>
   );
 };
 

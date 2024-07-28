@@ -24,7 +24,7 @@ function CategoryPage() {
 
   return (
     <div className="body">
-      <div className="background-image" />
+      {/* <div className="background-image" /> */}
       <div className="book-list-container">
         <h2>{categoryName} Books</h2>
         <div className="book-list">

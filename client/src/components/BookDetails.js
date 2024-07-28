@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchBookDetails, createOrder } from '../services/api';
-import '../css/BookDetail.css'; // Assuming you've added the styles here
 import pay from '../Payments/pay';
 import PaymentComponent from '../components/PaymentComponent';
 import AddToCartButton from '../components/AddToCartButton';
+import { Container, Row, Col, Image, Form, Card, Spinner, Alert, Button } from 'react-bootstrap';
+import { ClipLoader } from 'react-spinners';
+import '../css/BookDetail.css';
 
 function BookDetails({ userId }) {
   const { id } = useParams();
@@ -16,6 +18,10 @@ function BookDetails({ userId }) {
   const [sessionId, setSessionId] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [showUserDetails, setShowUserDetails] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [isFetchingSession, setIsFetchingSession] = useState(false);
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -38,6 +44,7 @@ function BookDetails({ userId }) {
   };
 
   const handlePayment = async () => {
+    setIsProcessing(true);
     try {
       await pay(sessionId);
       setPaymentStatus('Payment successful');
@@ -45,101 +52,98 @@ function BookDetails({ userId }) {
     } catch (error) {
       console.error('Error processing payment:', error);
       setPaymentStatus('Payment failed');
+    } finally {
+      setIsProcessing(false);
     }
   };
 
   const handleSetUserDetails = (details) => {
     setUserDetails(details);
+    setShowUserDetails(true);
   };
 
   const handlePaymentSuccess = () => {
     setPaymentStatus('Payment successful');
-    // Implement further actions upon successful payment if needed
   };
 
   const handlePaymentError = () => {
     setPaymentStatus('Payment failed');
-    // Implement error handling if needed
   };
 
   const handleAddToCartSuccess = () => {
-    // Implement any UI update or notification on success
     alert('Item added to cart successfully');
+    setIsAddingToCart(false);
   };
 
   const handleAddToCartError = (error) => {
     console.error('Error adding to cart:', error);
-    // Implement error handling or notification
+    setIsAddingToCart(false);
   };
 
   const handleQuantityChange = (event) => {
     setQuantity(parseInt(event.target.value, 10));
   };
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
+  const handleAddToCartClick = () => {
+    setIsAddingToCart(true);
+  };
+
+  if (loading) return <Spinner animation="border" />;
+  if (error) return <Alert variant="danger">{error}</Alert>;
 
   const showDescription = book && book.description;
-  const showReadMore = showDescription && book.description.length > 800;
+  const showReadMore = showDescription && book.description.length > 500;
 
   return (
-    <>
-      <div className="background-image"></div>
-      <div className={`book-details ${expanded ? 'expanded' : ''}`}>
-        <div className="book-details-image">
-          <img src={book.imageUrl} alt={book.title} />
-        </div>
-        <div className="book-details-content">
+    <Container className="my-4">
+      <Row className="bg-dark text-white rounded p-4">
+        <Col md={3} className="text-center">
+          <Image src={book.imageUrl} alt={book.title} fluid rounded />
+        </Col>
+        <Col md={6}>
           <h2>{book.title}</h2>
-          <div className="author-genre-row">
-            <p className="author">Author: {book.author}</p>
-            <p className="genre">Genre: {book.category}</p>
-          </div>
+          <p><strong>Author:</strong> {book.author}</p>
+          <p><strong>Genre:</strong> {book.category}</p>
           <hr />
           <div className={`description ${expanded ? 'expanded' : ''}`}>
-            <p>{book.description}</p>
+            <p>{expanded ? book.description : `${book.description.substring(0, 800)}...`}</p>
           </div>
           {showReadMore && (
-            <p className="read-more-link" onClick={toggleDescription}>
+            <Button variant="link" onClick={toggleDescription}>
               {expanded ? 'Read less' : 'Read more'}
-            </p>
+            </Button>
           )}
-          <p>Price: ₹ {book.price}</p>
-          <div className="quantity-add-to-cart-container">
-            <div className="quantity-input">
-              <label htmlFor="quantity">Quantity:</label>
-              <select id="quantity" name="quantity" value={quantity} onChange={handleQuantityChange}>
+          <p><strong>Price:</strong> ₹ {book.price}</p>
+          <Form.Group as={Row} className="align-items-center">
+            <Form.Label column sm="3">Quantity:</Form.Label>
+            <Col sm="3">
+              <Form.Control as="select" value={quantity} onChange={handleQuantityChange}>
                 {[...Array(10).keys()].map((i) => (
                   <option key={i + 1} value={i + 1}>{i + 1}</option>
                 ))}
-              </select>
-            </div>
-            <AddToCartButton
-              userId={userId}
-              bookId={book._id}
-              quantity={quantity}
-              onSuccess={handleAddToCartSuccess}
-              onError={handleAddToCartError}
-              className="add-to-cart-button"
-            />
-          </div>
-        </div>
-        <div className="buy-button-container">
-          {userDetails && (
-            <div className="user-details-box">
-              <h3>User Details:</h3>
-              <p>Username: {userDetails.customerName}</p>
-              <p>Email: {userDetails.customerEmail}</p>
-              <p>Phone: {userDetails.customerPhone}</p>
-            </div>
+              </Form.Control>
+            </Col>
+          </Form.Group>
+        </Col>
+        <Col md={3}>
+          {showUserDetails && (
+            <Card className="mt-4">
+              <Card.Header>User Details</Card.Header>
+              <Card.Body>
+                <Card.Text><strong>Username:</strong> {userDetails?.customerName}</Card.Text>
+                <Card.Text><strong>Email:</strong> {userDetails?.customerEmail}</Card.Text>
+                <Card.Text><strong>Phone:</strong> {userDetails?.customerPhone}</Card.Text>
+              </Card.Body>
+            </Card>
           )}
-          {paymentStatus && <p className="payment-status">{paymentStatus}</p>}
-
-          <div className="buy-card">
-            {sessionId ? (
-              <button className="buy-button" onClick={handlePayment}>
-                Proceed to Payment
-              </button>
+          {paymentStatus && <Alert variant={paymentStatus === 'Payment successful' ? 'success' : 'danger'}>{paymentStatus}</Alert>}
+          {isProcessing ? (
+            <ClipLoader size={35} />
+          ) : sessionId ? (
+            <Button variant="success" onClick={handlePayment} className="btn-block mt-4">Proceed to Payment</Button>
+          ) : (
+            isFetchingSession ? (
+              <ClipLoader size={35} className="mt-4" />
             ) : (
               <PaymentComponent
                 userId={userId}
@@ -149,12 +153,28 @@ function BookDetails({ userId }) {
                 setUserDetails={handleSetUserDetails}
                 onSuccess={handlePaymentSuccess}
                 onError={handlePaymentError}
+                className="mt-4"
+              />
+            )
+          )}
+          <div className="mt-4">
+            {isAddingToCart ? (
+              <ClipLoader size={35} />
+            ) : (
+              <AddToCartButton
+                userId={userId}
+                bookId={book._id}
+                quantity={quantity}
+                onSuccess={handleAddToCartSuccess}
+                onError={handleAddToCartError}
+                className="btn btn-secondary btn-block"
+                onClick={handleAddToCartClick}
               />
             )}
           </div>
-        </div>
-      </div>
-    </>
+        </Col>
+      </Row>
+    </Container>
   );
 }
 

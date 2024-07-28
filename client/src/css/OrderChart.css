@@ -1,11 +1,23 @@
-/* src/css/OrderPieChart.css */
-.pie-chart-container {
-  max-width: 600px; /* Adjust the max width as needed */
-  margin: 0 auto; /* Center the chart */
-  justify-content: center;
+.pie-chart-container1 {
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
 }
 
-.pie-chart-container canvas {
-  width: 50% !important;
-  height: auto !important;
+.pie-chart-container {
+  position: relative;
+  width: 100%;
+  height: 400px; /* Adjust height as needed */
+}
+
+@media (max-width: 768px) {
+  .pie-chart-container {
+    height: 300px; /* Adjust height for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .pie-chart-container {
+    height: 250px; /* Adjust height for extra small screens */
+  }
 }

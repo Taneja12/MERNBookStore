@@ -1,41 +1,76 @@
 @import url('https://fonts.googleapis.com/css2?family=Bona+Nova+SC:ital,wght@0,400;0,700;1,400&display=swap');
 
-.body {
+.home-body {
   padding-bottom: 50px;
   position: relative;
   min-height: 100vh;
-  background-image: url('https://images.pexels.com/photos/7381555/pexels-photo-7381555.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
-  background-size: cover; /* Ensure the background image covers the entire viewport */
-  background-position: center; /* Center the background image */
-  background-repeat: no-repeat; /* Prevent background image from repeating */
+  background-color: #121212; /* Dark background color */
+  color: #ffffff; /* White text color */
 }
+
+.home-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  background: url('../Static/pic3.jpeg') no-repeat center center / cover; /* Background image */
+  height: 70vh; /* Adjust height as needed */
+  color: #fff; /* White text color */
+}
+
+.home-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Black overlay with 50% opacity */
+  z-index: 1;
+}
+
+.home-header-content {
+  max-width: 80%;
+  position: relative;
+  z-index: 2;
+}
+
+.home-header h1 {
+  font-family: 'Bona Nova SC', serif;
+  font-size: 80px; /* Adjust size as needed */
+  margin: 0;
+  font-weight: 700; /* Bold text */
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.6); /* Add shadow to the text */
+}
+
+.home-header p {
+  font-family: 'Bona Nova SC', serif;
+  font-size: 28px; /* Adjust size as needed */
+  margin: 10px 0 0 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Add shadow to the text */
+}
+
+
 
 .book-list-container {
   position: relative;
   z-index: 1;
-  width: 85%;
-  margin: 20px auto;
-  margin-bottom: 0;
-  background-color: rgba(8, 8, 8, 0.8); /* Transparent black background */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Shadow for container */
-  border-radius: 8px; /* Rounded corners */
-  overflow: hidden; /* Ensure content doesn't overflow */
+  width: 100%;
+  margin: 20px 0;
+  background-color: #1e1e1e; /* Slightly lighter dark color */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  padding: 40px 20px;
 }
 
-.container {
-  display: flex;
-  flex-direction: column;
+.book-list-container h2 {
+  font-family: 'Bona Nova SC', serif;
   text-align: center;
-}
-
-.container p {
-  color: white;
-  font-family: "Bona Nova SC", serif;
-  font-weight: 700;
-  font-style: bold;
-  font-size: 120px;
-  margin: 0;
-  -webkit-text-fill-color: #ffffff;
+  margin-bottom: 30px;
+  font-size: 36px;
+  color: #ffffff;
 }
 
 .book-list {
@@ -63,8 +98,7 @@
 }
 
 .pagination-button:hover {
-  color: #a09f9f; /* Darker color on hover */
-  text-decoration: none; /* Remove underline on hover */
+  background: #0056b3;
 }
 
 .pagination-button:disabled {
@@ -75,69 +109,76 @@
 .pagination-info {
   margin: 0 10px;
   font-size: 18px;
-  color: #fff;
+  color: #ffffff;
 }
 
-/* Media Queries for Responsive Design */
-
-/* Large screens */
 @media (min-width: 1200px) {
-  .container p {
-    font-size: 100px;
+  .home-header h1 {
+    font-size: 100px; /* Larger font size for large screens */
+  }
+
+  .home-header p {
+    font-size: 30px;
   }
 
   .book-list-container {
-    width: 75%;
+    width: 90%;
+    margin: 20px auto;
   }
 }
 
-/* Medium screens */
 @media (max-width: 1199px) and (min-width: 768px) {
-  .container p {
-    font-size: 80px;
+  .home-header h1 {
+    font-size: 80px; /* Adjust font size */
+  }
+
+  .home-header p {
+    font-size: 28px;
   }
 
   .book-list-container {
-    width: 85%;
+    width: 95%;
+    margin: 20px auto;
   }
 }
 
-/* Small screens */
 @media (max-width: 767px) {
-  .container p {
-    font-size: 60px;
-    padding: 10px;
+  .home-header h1 {
+    font-size: 50px; /* Adjust font size */
+  }
+
+  .home-header p {
+    font-size: 24px;
   }
 
   .book-list-container {
-    width: 70%;
-    margin: 10px auto;
-    margin-bottom: 0;
-    padding: 10px;
+    width: 98%;
+    margin: 20px auto;
   }
 
   .pagination-info {
     font-size: 16px;
   }
 
-  /* Adjust grid layout for smaller screens */
   .book-list {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   }
 }
 
-/* Extra small screens */
 @media (max-width: 480px) {
-  .container p {
-    font-size: 40px;
+  .home-header h1 {
+    font-size: 40px; /* Adjust font size */
+  }
+
+  .home-header p {
+    font-size: 18px;
+  }
+
+  .book-list-container h2 {
+    font-size: 28px;
   }
 
   .pagination-info {
     font-size: 14px;
-  }
-
-  /* Further adjust grid layout for very small screens */
-  .book-list {
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   }
 }

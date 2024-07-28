@@ -7,7 +7,7 @@ function Book({ book }) {
     return <p>No book data available.</p>;
   }
 
-  const { _id, title, author, price, imageUrl } = book;
+  const { _id, title, imageUrl } = book;
 
   return (
     <Link to={`/book/${_id}`} className="book-card-link">
@@ -25,8 +25,6 @@ function Book({ book }) {
           <div className="overlay">
             <div className="overlay-content">
               <h2>{title}</h2>
-              {/* <p>Author: {author}</p> */}
-              {/* <p>Price: {price}</p> */}
             </div>
           </div>
         </div>

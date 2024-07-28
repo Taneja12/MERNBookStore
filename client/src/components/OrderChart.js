@@ -1,4 +1,3 @@
-// src/components/OrderPieChart.js
 import React from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
@@ -44,12 +43,16 @@ const OrderChart = ({ orders }) => {
     ]
   };
 
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false
+  };
+
   return (
     <div className="pie-chart-container1">
       <h2>Order Statistics</h2>
       <div className="pie-chart-container">
-
-        <Pie data={data} />
+        <Pie data={data} options={options} />
       </div>
     </div>
   );

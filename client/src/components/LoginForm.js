@@ -1,13 +1,25 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { loginUser } from '../services/api'; // Import the service function
+import { Form, Button, Alert } from 'react-bootstrap';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 import '../css/LoginForm.css'; // Import CSS file
 
 const LoginForm = ({ setIsAuthenticated }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [redirectMessage, setRedirectMessage] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    AOS.init();
+    if (location.state && location.state.message) {
+      setRedirectMessage(location.state.message);
+    }
+  }, [location.state]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,30 +46,35 @@ const LoginForm = ({ setIsAuthenticated }) => {
 
   return (
     <div className="form-container">
-      <div className="form-wrapper">
+      <div className="form-wrapper" data-aos="fade-up" data-aos-duration="1000">
         <h1>Login</h1>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="input-field"
-            placeholder="Username"
-            required
-          />
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="input-field"
-            placeholder="Password"
-            required
-          />
-          <button type="submit" className="button1">
+        {redirectMessage && <Alert variant="info" className="redirect-message">{redirectMessage}</Alert>}
+        <Form onSubmit={handleSubmit}>
+          <Form.Group controlId="username">
+            <Form.Control
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="input-field"
+              placeholder="Username"
+              required
+            />
+          </Form.Group>
+          <Form.Group controlId="password">
+            <Form.Control
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="input-field"
+              placeholder="Password"
+              required
+            />
+          </Form.Group>
+          <Button type="submit" className="button1" variant="primary">
             Login
-          </button>
-        </form>
-        {error && <p className="error-message">{error}</p>}
+          </Button>
+        </Form>
+        {error && <Alert variant="danger" className="error-message">{error}</Alert>}
         <div className="links-container">
           <div className="forgot-password">
             <a href="/forgot-password" className="forgot-password-link">Forgot your password?</a>
