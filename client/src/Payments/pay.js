@@ -1,7 +1,7 @@
 import cashfree from "./utils";
 
 const pay = async (paymentSessionId) => {
-  let checkoutOptions = {
+  const checkoutOptions = {
     paymentSessionId: paymentSessionId,
     returnUrl: "https://mern-book-store-ajdb-frontend-deepanshu-tanejas-projects.vercel.app/payment-return",
   };
@@ -11,33 +11,39 @@ const pay = async (paymentSessionId) => {
 
     if (result.error) {
       alert(result.error.message);
-      throw new Error(result.error.message); // Ensure the error is propagated
+      throw new Error(result.error.message);
     }
 
     if (result.redirect) {
-      // Assuming the redirect result includes the transaction ID in the URL
-      const url = new URL(result.redirect.url);
-      const transactionId = url.searchParams.get('transactionId');
+      // Debug the URL being received
+      console.log('Redirect URL:', result.redirect.url);
       
-      if (transactionId) {
-        console.log("Transaction ID:", transactionId);
-        // Here, you might want to save the transaction ID or handle it further
-        // For instance, store it in localStorage or handle it in your state
-        localStorage.setItem('transactionId', transactionId);
-      } else {
-        console.error('Transaction ID not found in the redirect URL.');
-      }
+      try {
+        // Ensure the redirect URL is valid
+        const url = new URL(result.redirect.url);
+        const transactionId = url.searchParams.get('transactionId');
+        
+        if (transactionId) {
+          console.log("Transaction ID:", transactionId);
+          localStorage.setItem('transactionId', transactionId);
+        } else {
+          console.error('Transaction ID not found in the redirect URL.');
+        }
 
-      // Redirect to the provided URL
-      window.location.href = result.redirect.url;
+        // Redirect to the provided URL
+        window.location.href = result.redirect.url;
+      } catch (urlError) {
+        console.error('Invalid URL:', urlError);
+        alert('The redirect URL is invalid.');
+      }
     }
 
-    return result; // Return the result from Cashfree checkout
+    return result;
 
   } catch (error) {
     console.error('Error processing payment:', error);
     alert('Payment failed. Please try again later.');
-    throw error; // Propagate the error further
+    throw error;
   }
 };
 
