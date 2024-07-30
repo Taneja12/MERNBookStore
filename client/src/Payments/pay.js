@@ -4,15 +4,15 @@ import cashfree from "./utils";
 const pay = (paymentSessionId) => {
   let checkoutOptions = {
     paymentSessionId: paymentSessionId,
-    returnUrl: "https://mern-book-store-ajdb-frontend-deepanshu-tanejas-projects.vercel.app/payment-return",
+    returnUrl: "https://mern-book-store-ajdb-frontend-deepanshu-tanejas-projects.vercel.app",
   };
 
   return cashfree.checkout(checkoutOptions)
-    .then(function(result) {
-      if (result.error) {
+    .then(function(result){
+      if(result.error){
         alert(result.error.message);
       }
-      if (result.redirect) {
+      if(result.redirect){
         console.log("Redirection");
       }
       return result; // Return the result from Cashfree checkout

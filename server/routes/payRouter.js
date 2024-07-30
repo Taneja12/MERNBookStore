@@ -2,20 +2,14 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 const Order = require('../models/Orders');
+const Book = require('../models/Book'); 
 const moment = require('moment');
 require('dotenv').config();
 
-// Load environment variables
 const CF_API_BASE_URL = process.env.CF_API_BASE_URL;
 const CF_APP_ID = process.env.CF_APP_ID;
 const CF_SECRET_KEY = process.env.CF_SECRET_KEY;
 
-// Check for missing environment variables
-if (!CF_API_BASE_URL || !CF_APP_ID || !CF_SECRET_KEY) {
-  throw new Error('Missing environment variables for Cashfree API.');
-}
-
-// Create Order Endpoint
 router.post('/createOrder', async (req, res) => {
   try {
     const { orderId, orderAmount, customer_id, customerName, customerEmail, customerPhone } = req.body;
@@ -64,13 +58,13 @@ const allowedIps = {
   ]
 };
 
-// Dynamic environment check
-const environment = process.env.NODE_ENV || 'test';
-const allowedIpsCurrentEnv = allowedIps[environment] || [];
+// Assuming you are in a test environment
+const allowedIpsCurrentEnv = allowedIps.test;
 
-// IP Filtering Middleware
 const ipFilter = (req, res, next) => {
   const ip = req.ip || req.connection.remoteAddress;
+
+  // If behind a proxy, you might need to use req.headers['x-forwarded-for']
   const forwardedIp = req.headers['x-forwarded-for'] || ip;
 
   if (allowedIpsCurrentEnv.includes(forwardedIp)) {
@@ -80,49 +74,19 @@ const ipFilter = (req, res, next) => {
   }
 };
 
-// Webhook Endpoint
-// Webhook Endpoint
-router.post('/webhook', ipFilter, async (req, res) => {
+// Webhook endpoint for Cashfree
+router.post('/webhook', ipFilter, (req, res) => {
   const event = req.body;
   console.log('Received webhook event:', event);
 
-  // Extract necessary details from the event
-  const {
-    data: {
-      order: { order_id },
-      payment: { cf_payment_id, payment_status }
-    },
-    type
-  } = event;
+  // Process the event here
+  // For example, you can handle order success, failure, etc.
 
-  if (type === 'PAYMENT_SUCCESS_WEBHOOK' && cf_payment_id && order_id) {
-    try {
-      const order = await Order.findOne({ orderId: order_id });
-
-      if (order) {
-        order.paymentStatus = payment_status;
-        order.transactionId = cf_payment_id;
-        await order.save();
-
-        // Notify user or take further actions as needed
-        console.log('Order updated with transaction ID:', cf_payment_id);
-        res.status(200).send('Webhook processed successfully');
-      } else {
-        console.log('Order not found for order ID:', order_id);
-        res.status(404).send('Order not found');
-      }
-    } catch (error) {
-      console.error('Error processing webhook:', error.message);
-      res.status(500).send('Internal server error');
-    }
-  } else {
-    console.log('Invalid webhook payload or missing required fields');
-    res.status(400).send('Invalid payload');
-  }
+  res.status(200).send('Webhook received successfully');
 });
 
 
-// Create New Order Endpoint
+
 router.post('/new', async (req, res) => {
   try {
     const { sessionId, userId, cartItems } = req.body;
@@ -131,19 +95,18 @@ router.post('/new', async (req, res) => {
       sessionId,
       userId,
       cartItems,
-      createdAt: moment().format('YYYY-MM-DDTHH:mm:ss.SSSZ'), // Set createdAt manually to current date/time
+      createdAt:moment().format('YYYY-MM-DDTHH:mm:ss.SSSZ'), // Set createdAt manually to current date/time
     });
 
     const savedOrder = await order.save();
 
     res.status(201).json(savedOrder);
   } catch (error) {
-    console.error('Error creating order:', error.message);
+    console.error('Error creating order:', error);
     res.status(500).json({ error: 'Failed to create order' });
   }
 });
 
-// Fetch Orders for a User Endpoint
 router.get('/user/:userId', async (req, res) => {
   const { userId } = req.params;
 
@@ -151,35 +114,13 @@ router.get('/user/:userId', async (req, res) => {
     const orders = await Order.find({ userId }).populate('cartItems.bookId');
     res.json(orders);
   } catch (error) {
-    console.error('Error fetching orders:', error.message);
+    console.error('Error fetching orders:', error);
     res.status(500).json({ error: 'Failed to fetch orders' });
   }
 });
 
-// Handle Payment Return Endpoint
-router.post('/payment-return', async (req, res) => {
-  try {
-    const { transactionId, orderId, paymentStatus } = req.body;
-
-    if (!transactionId || !orderId) {
-      return res.status(400).json({ error: 'Transaction ID and Order ID are required' });
-    }
-
-    const order = await Order.findOne({ orderId });
-
-    if (order) {
-      order.paymentStatus = paymentStatus;
-      order.transactionId = transactionId;
-      await order.save();
-
-      res.status(200).json({ message: 'Order updated successfully' });
-    } else {
-      res.status(404).json({ error: 'Order not found' });
-    }
-  } catch (error) {
-    console.error('Error handling payment return:', error.message);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
 module.exports = router;
+
+
+
+

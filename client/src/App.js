@@ -19,9 +19,11 @@ import ContactUs from './components/ContactUs';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
 import Footer from './components/Footer'; // Import the Footer component
-import PaymentReturn from './components/PaymentReturn'; // Import PaymentReturn component
 import { fetchUserDetails } from './services/api';
 import {jwtDecode} from 'jwt-decode';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -93,9 +95,8 @@ function App() {
             <Route path='/orders' element={<OrderList userId={userId} />} />
             <Route path="/admin" element={isAuthenticated && isAdmin ? <AdminDashboard /> : <Navigate to="/login" />} />
             <Route path="/contact" element={<ContactUs />} />
-            <Route path="/forgot-password" element={isAuthenticated ? <Navigate to="/" /> : <ForgotPassword />} />
-            <Route path="/reset-password/:token" element={isAuthenticated ? <Navigate to="/" /> : <ResetPassword />} />
-            <Route path="/payment-return" element={<PaymentReturn />} /> {/* Add route for PaymentReturn */}
+            <Route path="/forgot-password" element={isAuthenticated ? <Navigate to="/" />:<ForgotPassword />  }  />
+            <Route path="/reset-password/:token" element={isAuthenticated ? <Navigate to="/" />:<ResetPassword /> } />
           </Routes>
         </div>
         <Footer /> {/* Add Footer component here */}
