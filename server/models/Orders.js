@@ -24,6 +24,15 @@ const orderSchema = new mongoose.Schema({
     default: Date.now, // Automatically set the current date and time
     required: true,
   },
+  transactionId: { 
+    type: String, 
+    default: null 
+  },
+  paymentStatus: { 
+    type: String, 
+    enum: ['pending', 'completed', 'failed'], // You can customize this as needed
+    default: 'pending' 
+  },
 });
 
 // Optionally, you can add a virtual field to format `createdAt` for output

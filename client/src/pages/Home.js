@@ -9,7 +9,7 @@ function Home() {
   const [books, setBooks] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [pageSize, setPageSize] = useState(8);
+  const [pageSize, setPageSize] = useState(8); // Set page size to a fixed value
 
   useEffect(() => {
     AOS.init({
@@ -17,24 +17,6 @@ function Home() {
       once: true,
     });
 
-    const updatePageSize = () => {
-      const width = window.innerWidth;
-      if (width >= 1225) {
-        setPageSize(7); // Large screens
-      } else if (width >= 768) {
-        setPageSize(8); // Medium screens
-      } else {
-        setPageSize(6); // Small screens
-      }
-    };
-
-    updatePageSize();
-    window.addEventListener('resize', updatePageSize);
-
-    return () => window.removeEventListener('resize', updatePageSize);
-  }, []);
-
-  useEffect(() => {
     const fetchBooksData = async () => {
       try {
         const data = await fetchBooks({ page, pageSize });

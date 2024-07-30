@@ -1,25 +1,35 @@
-// PaymentReturn.js
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { processPaymentReturn } from '../services/api'; // Adjust the path if needed
 
 const PaymentReturn = () => {
   const location = useLocation();
 
   useEffect(() => {
-    // Log the entire location object to inspect its structure
-    console.log("Location Object:", location);
-
-    // Parse query parameters
     const queryParams = new URLSearchParams(location.search);
     const transactionId = queryParams.get('transactionId');
     const orderId = queryParams.get('orderId');
     const paymentStatus = queryParams.get('paymentStatus');
 
-    if (transactionId) {
+    if (transactionId && orderId) {
       console.log("Transaction ID:", transactionId);
-      // Process the transaction ID as needed
+      console.log("Order ID:", orderId);
+      console.log("Payment Status:", paymentStatus);
+
+      // Send the details to your backend using the API service
+      processPaymentReturn({
+        transactionId,
+        orderId,
+        paymentStatus
+      })
+      .then(response => {
+        console.log('Payment return processed:', response);
+      })
+      .catch(error => {
+        console.error('Error processing payment return:', error);
+      });
     } else {
-      console.log("Transaction ID not found in the query parameters");
+      console.log("Transaction ID or Order ID not found in the query parameters");
     }
   }, [location]);
 
