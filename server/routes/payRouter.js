@@ -81,33 +81,46 @@ const ipFilter = (req, res, next) => {
 };
 
 // Webhook Endpoint
+// Webhook Endpoint
 router.post('/webhook', ipFilter, async (req, res) => {
   const event = req.body;
   console.log('Received webhook event:', event);
 
-  const { transactionId, orderId, paymentStatus } = event;
+  // Extract necessary details from the event
+  const {
+    data: {
+      order: { order_id },
+      payment: { cf_payment_id, payment_status }
+    },
+    type
+  } = event;
 
-  if (transactionId && orderId) {
+  if (type === 'PAYMENT_SUCCESS_WEBHOOK' && cf_payment_id && order_id) {
     try {
-      const order = await Order.findOne({ orderId });
+      const order = await Order.findOne({ orderId: order_id });
 
       if (order) {
-        order.paymentStatus = paymentStatus;
-        order.transactionId = transactionId;
+        order.paymentStatus = payment_status;
+        order.transactionId = cf_payment_id;
         await order.save();
 
         // Notify user or take further actions as needed
-        console.log('Order updated with transaction ID:', transactionId);
+        console.log('Order updated with transaction ID:', cf_payment_id);
+        res.status(200).send('Webhook processed successfully');
       } else {
-        console.log('Order not found for transaction ID:', transactionId);
+        console.log('Order not found for order ID:', order_id);
+        res.status(404).send('Order not found');
       }
     } catch (error) {
       console.error('Error processing webhook:', error.message);
+      res.status(500).send('Internal server error');
     }
+  } else {
+    console.log('Invalid webhook payload or missing required fields');
+    res.status(400).send('Invalid payload');
   }
-
-  res.status(200).send('Webhook received successfully');
 });
+
 
 // Create New Order Endpoint
 router.post('/new', async (req, res) => {
