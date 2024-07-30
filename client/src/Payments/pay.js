@@ -9,18 +9,22 @@ const pay = async (paymentSessionId) => {
   try {
     const result = await cashfree.checkout(checkoutOptions);
 
+    // Debug the full result
+    console.log('Cashfree Checkout Result:', result);
+
     if (result.error) {
       alert(result.error.message);
       throw new Error(result.error.message);
     }
 
     if (result.redirect) {
-      // Debug the URL being received
-      console.log('Redirect URL:', result.redirect.url);
-      
+      // Validate the redirect URL
+      const redirectUrl = result.redirect.url;
+      console.log('Redirect URL:', redirectUrl);
+
       try {
         // Ensure the redirect URL is valid
-        const url = new URL(result.redirect.url);
+        const url = new URL(redirectUrl);
         const transactionId = url.searchParams.get('transactionId');
         
         if (transactionId) {
@@ -31,7 +35,7 @@ const pay = async (paymentSessionId) => {
         }
 
         // Redirect to the provided URL
-        window.location.href = result.redirect.url;
+        window.location.href = redirectUrl;
       } catch (urlError) {
         console.error('Invalid URL:', urlError);
         alert('The redirect URL is invalid.');
