@@ -249,7 +249,7 @@ export const resetPassword = async (token, newPassword) => {
 
 export const processPaymentReturn = async (paymentData) => {
   try {
-    const response = await axios.post(`${BASE_URL}/api/payment-return`, paymentData);
+    const response = await axios.post(`${BASE_URL}/api/orders/payment-return`, paymentData);
     return response.data;
   } catch (error) {
     console.error('Error processing payment return:', error);
