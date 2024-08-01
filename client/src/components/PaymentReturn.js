@@ -1,9 +1,11 @@
-// PaymentReturn.js
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 const PaymentReturn = () => {
   const location = useLocation();
+  const [transactionId, setTransactionId] = useState(null);
+  const [paymentStatus, setPaymentStatus] = useState(null);
+  const [orderId, setOrderId] = useState(null);
 
   useEffect(() => {
     // Log the entire location object to inspect its structure
@@ -17,16 +19,34 @@ const PaymentReturn = () => {
 
     if (transactionId) {
       console.log("Transaction ID:", transactionId);
-      // Process the transaction ID as needed
+      setTransactionId(transactionId);
     } else {
       console.log("Transaction ID not found in the query parameters");
+    }
+
+    if (orderId) {
+      console.log("Order ID:", orderId);
+      setOrderId(orderId);
+    }
+
+    if (paymentStatus) {
+      console.log("Payment Status:", paymentStatus);
+      setPaymentStatus(paymentStatus);
     }
   }, [location]);
 
   return (
     <div>
       <h1>Payment Return</h1>
-      <p>Processing payment...</p>
+      {transactionId ? (
+        <div>
+          <p><strong>Transaction ID:</strong> {transactionId}</p>
+          <p><strong>Order ID:</strong> {orderId}</p>
+          <p><strong>Payment Status:</strong> {paymentStatus}</p>
+        </div>
+      ) : (
+        <p>Transaction details not available.</p>
+      )}
     </div>
   );
 };

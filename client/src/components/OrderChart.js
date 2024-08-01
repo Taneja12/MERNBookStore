@@ -50,7 +50,7 @@ const OrderChart = ({ orders }) => {
 
   return (
     <div className="pie-chart-container1">
-      <h2>Order Statistics</h2>
+      <h2 style={{color:"black"}}>Order Statistics</h2>
       <div className="pie-chart-container">
         <Pie data={data} options={options} />
       </div>

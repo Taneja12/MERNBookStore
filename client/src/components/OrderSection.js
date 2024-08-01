@@ -3,14 +3,17 @@ import React from 'react';
 const OrderSection = ({ orders }) => {
   return (
     <div className="section">
-      <h2>Orders</h2>
+      <h2 style={{color:"black"}}>Orders</h2>
       {Array.isArray(orders) && orders.length > 0 ? (
         <ul className="order-list">
-          {orders.map((order) => (
+          {orders
+          .filter(order => order.transactionId)
+          .map((order) => (
             <li key={order._id} className="order-item">
               <div className="order-details">
                 <h3>Order ID: {order._id}</h3>
-                <p>Username: {order.userId?.username || 'Unknown'}</p> {/* Display user name */}
+                <h3>Transaction ID: {order.transactionId}</h3>
+                <p style={{color:"black"}}>Username: {order.userId?.username || 'Unknown'}</p> {/* Display user name */}
                 {/* <p>Session ID: {order.sessionId}</p> */}
                 <ul className="order-items">
                   {order.cartItems.map((item) => (

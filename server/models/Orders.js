@@ -19,10 +19,24 @@ const orderSchema = new mongoose.Schema({
       required: true 
     }
   }],
+  OrderId: {
+    type: String,
+    default: null,
+  }, // New field for the order ID received from webhook
   createdAt: {
     type: Date,
     default: Date.now, // Automatically set the current date and time
     required: true,
+  },
+  paymentStatus: {
+    type: String,
+    enum: ['Pending', 'Paid', 'Failed'],
+    default: 'Pending',
+    required: true,
+  },
+  transactionId: {
+    type: String,
+    default: null,
   },
 });
 

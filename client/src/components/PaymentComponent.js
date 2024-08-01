@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { fetchUserDetails, OrderCreation } from '../services/api';
 import { Button } from 'react-bootstrap';
 
-const PaymentComponent = ({ userId, cartItems, totalAmount, setSessionId, setUserDetails }) => {
+const PaymentComponent = ({ userId, cartItems, totalAmount, setSessionId,setOrderId, setUserDetails }) => {
   const [userEmail, setUserEmail] = useState(null);
   const [userPhone, setUserPhone] = useState(null);
   const [userName, setUserName] = useState(null);
@@ -50,8 +50,9 @@ const PaymentComponent = ({ userId, cartItems, totalAmount, setSessionId, setUse
       };
 
       const response = await OrderCreation(orderData, token);
-      const { sessionId } = response;
+      const { sessionId, order_id } = response;
       setSessionId(sessionId);
+      setOrderId(order_id);
 
       const userDetails = {
         customerName: userName,

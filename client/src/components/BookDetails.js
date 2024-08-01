@@ -16,6 +16,7 @@ function BookDetails({ userId }) {
   const [expanded, setExpanded] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState(null);
   const [sessionId, setSessionId] = useState(null);
+  const [OrderId, setOrderId] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [showUserDetails, setShowUserDetails] = useState(false);
@@ -48,7 +49,7 @@ function BookDetails({ userId }) {
     try {
       await pay(sessionId);
       setPaymentStatus('Payment successful');
-      await createOrder(sessionId, userId, [{ bookId: book._id, quantity, bookPrice: book.price }]);
+      await createOrder(sessionId, userId, [{ bookId: book._id, quantity, bookPrice: book.price }], OrderId);
     } catch (error) {
       console.error('Error processing payment:', error);
       setPaymentStatus('Payment failed');
@@ -150,6 +151,7 @@ function BookDetails({ userId }) {
                 cartItems={[{ bookId: book._id, quantity, bookPrice: book.price }]}
                 totalAmount={quantity * book.price}
                 setSessionId={setSessionId}
+                setOrderId={setOrderId}
                 setUserDetails={handleSetUserDetails}
                 onSuccess={handlePaymentSuccess}
                 onError={handlePaymentError}
@@ -157,6 +159,7 @@ function BookDetails({ userId }) {
               />
             )
           )}
+          {/* {OrderId} */}
           <div className="mt-4">
             {isAddingToCart ? (
               <ClipLoader size={35} />

@@ -41,7 +41,7 @@ function AdminDashboard() {
       case 'books':
         return (
           <div className="section">
-            <h2>Books</h2>
+            <h2 style={{color:"black"}}>Books</h2>
             {Array.isArray(books) && books.length > 0 ? (
               <div className="books-container">
                 {books.map((book) => (
@@ -56,7 +56,7 @@ function AdminDashboard() {
       case 'users':
         return (
           <div className="section">
-            <h2>Users</h2>
+            <h2 style={{color:"black"}}>Users</h2>
             {Array.isArray(users) && users.length > 0 ? (
               <ul className="user-list">
                 {users.filter(user => user.role !== 'admin').map((user) => ( // Filter out admin users

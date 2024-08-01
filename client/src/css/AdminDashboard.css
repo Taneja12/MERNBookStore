@@ -120,3 +120,12 @@
 .section ul li:last-child {
   border-bottom: none;
 }
+/* src/css/AdminDashboard.css */
+
+.user-item {
+  color: black; /* Adjust to your desired color */
+}
+
+.user-item p {
+  color: black; /* Ensure all text within user-item is also visible */
+}

@@ -1,19 +1,21 @@
-// pay.js
 import cashfree from "./utils";
 
 const pay = (paymentSessionId) => {
   let checkoutOptions = {
     paymentSessionId: paymentSessionId,
-    returnUrl: "https://mern-book-store-ajdb-frontend-deepanshu-tanejas-projects.vercel.app",
+    returnUrl: "https://mern-book-store-ajdb-frontend-deepanshu-tanejas-projects.vercel.app/orders", // Update with your return URL
+    notifyUrl: "https://mern-book-store-ajdb-frontend-deepanshu-tanejas-projects.vercel.app/webhook" // Webhook endpoint
   };
 
   return cashfree.checkout(checkoutOptions)
     .then(function(result){
+      console.log('Cashfree checkout result:', result); // Log the result
       if(result.error){
         alert(result.error.message);
+        console.error('Error:', result.error);
       }
       if(result.redirect){
-        console.log("Redirection");
+        console.log("Redirection URL:", result.redirect.url); // Log redirection URL
       }
       return result; // Return the result from Cashfree checkout
     })

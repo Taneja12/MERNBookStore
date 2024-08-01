@@ -121,12 +121,14 @@ export const removeCartItem = async (userId, bookId) => {
   }
 };
 
-export const createOrder = async (sessionId, userId, cartItems) => {
+export const createOrder = async (sessionId, userId, cartItems, OrderId) => {
   try {
+    console.log(OrderId);
     const response = await axios.post(`${BASE_URL}/api/orders/new`, {
       sessionId,
       userId,
       cartItems,
+      OrderId,
     });
     return response.data;
   } catch (error) {

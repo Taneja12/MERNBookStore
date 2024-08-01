@@ -4,6 +4,7 @@ const axios = require('axios');
 const Order = require('../models/Orders');
 const Book = require('../models/Book'); 
 const moment = require('moment');
+const { handleWebhook } = require('../controllers/webhookController');
 require('dotenv').config();
 
 const CF_API_BASE_URL = process.env.CF_API_BASE_URL;
@@ -34,9 +35,9 @@ router.post('/createOrder', async (req, res) => {
     });
 
     const responseData = response.data;
-
+    console.log(responseData);
     if (responseData.order_status === 'ACTIVE') {
-      res.json({ sessionId: responseData.payment_session_id });
+      res.json({ sessionId: responseData.payment_session_id , order_id:responseData.order_id});
     } else {
       throw new Error(responseData.message || 'Unknown error');
     }
@@ -75,26 +76,19 @@ const ipFilter = (req, res, next) => {
 };
 
 // Webhook endpoint for Cashfree
-router.post('/webhook', ipFilter, (req, res) => {
-  const event = req.body;
-  console.log('Received webhook event:', event);
-
-  // Process the event here
-  // For example, you can handle order success, failure, etc.
-
-  res.status(200).send('Webhook received successfully');
-});
+router.post('/webhook', handleWebhook);
 
 
 
 router.post('/new', async (req, res) => {
   try {
-    const { sessionId, userId, cartItems } = req.body;
-
+    const { sessionId, userId, cartItems,OrderId } = req.body;
+    console.log(OrderId);
     const order = new Order({
       sessionId,
       userId,
       cartItems,
+      OrderId,
       createdAt:moment().format('YYYY-MM-DDTHH:mm:ss.SSSZ'), // Set createdAt manually to current date/time
     });
 
