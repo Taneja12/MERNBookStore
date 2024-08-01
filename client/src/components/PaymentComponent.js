@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchUserDetails, OrderCreation } from '../services/api';
-import { Button } from 'react-bootstrap';
+import { Button, Spinner } from 'react-bootstrap';
 
-const PaymentComponent = ({ userId, cartItems, totalAmount, setSessionId,setOrderId, setUserDetails }) => {
+const PaymentComponent = ({ userId, cartItems, totalAmount, setSessionId, setOrderId, setUserDetails }) => {
   const [userEmail, setUserEmail] = useState(null);
   const [userPhone, setUserPhone] = useState(null);
   const [userName, setUserName] = useState(null);
+  const [loading, setLoading] = useState(false); // Added loading state
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,6 +34,8 @@ const PaymentComponent = ({ userId, cartItems, totalAmount, setSessionId,setOrde
       navigate('/login', { state: { message: 'Please log in to proceed with the payment.' } });
       return;
     }
+
+    setLoading(true); // Set loading to true when payment starts
 
     try {
       const orderData = {
@@ -63,6 +66,8 @@ const PaymentComponent = ({ userId, cartItems, totalAmount, setSessionId,setOrde
 
     } catch (error) {
       console.error('Error creating order:', error);
+    } finally {
+      setLoading(false); // Set loading to false when payment is complete
     }
   };
 
@@ -71,9 +76,17 @@ const PaymentComponent = ({ userId, cartItems, totalAmount, setSessionId,setOrde
       variant="primary" 
       onClick={handlePayment} 
       className="btn-block" 
-      style={{textTransform : "none" }}
+      style={{ textTransform: 'none' }}
+      disabled={loading} // Disable button while loading
     >
-      Buy Now
+      {loading ? (
+        <div className="d-flex align-items-center">
+          <Spinner animation="border" size="sm" className="mr-2" />
+          Processing...
+        </div>
+      ) : (
+        'Buy Now'
+      )}
     </Button>
   );
 };
