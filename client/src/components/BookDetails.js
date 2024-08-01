@@ -4,7 +4,7 @@ import { fetchBookDetails, createOrder } from '../services/api';
 import pay from '../Payments/pay';
 import PaymentComponent from '../components/PaymentComponent';
 import AddToCartButton from '../components/AddToCartButton';
-import { Container, Row, Col, Image, Form, Card, Spinner, Alert, Button } from 'react-bootstrap';
+import { Container, Row, Col, Image, Form, Card, Spinner, Alert, Button, Modal } from 'react-bootstrap';
 import { ClipLoader } from 'react-spinners';
 import '../css/BookDetail.css';
 
@@ -139,7 +139,12 @@ function BookDetails({ userId }) {
           )}
           {paymentStatus && <Alert variant={paymentStatus === 'Payment successful' ? 'success' : 'danger'}>{paymentStatus}</Alert>}
           {isProcessing ? (
-            <ClipLoader size={35} />
+            <Modal show={isProcessing} centered backdrop="static">
+              <Modal.Body className="text-center">
+                <ClipLoader size={50} /> {/* Larger spinner */}
+                <p className="mt-3">Processing your payment...</p>
+              </Modal.Body>
+            </Modal>
           ) : sessionId ? (
             <Button variant="success" onClick={handlePayment} className="btn-block mt-4">Proceed to Payment</Button>
           ) : (
@@ -159,7 +164,6 @@ function BookDetails({ userId }) {
               />
             )
           )}
-          {/* {OrderId} */}
           <div className="mt-4">
             {isAddingToCart ? (
               <ClipLoader size={35} />
