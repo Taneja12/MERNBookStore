@@ -4,7 +4,7 @@ import { fetchBookDetails, createOrder } from '../services/api';
 import pay from '../Payments/pay';
 import PaymentComponent from '../components/PaymentComponent';
 import AddToCartButton from '../components/AddToCartButton';
-import { Container, Row, Col, Image, Form, Card, Spinner, Alert, Button } from 'react-bootstrap';
+import { Container, Row, Col, Image, Form, Card, Alert, Button, Spinner } from 'react-bootstrap';
 import { ClipLoader } from 'react-spinners';
 import '../css/BookDetail.css';
 
@@ -23,7 +23,6 @@ function BookDetails({ userId }) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [isFetchingSession, setIsFetchingSession] = useState(false);
-  const [showBackdrop, setShowBackdrop] = useState(false);
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -46,8 +45,8 @@ function BookDetails({ userId }) {
   };
 
   const handlePayment = async () => {
-    setShowBackdrop(true); // Show the backdrop when payment starts
     setIsProcessing(true);
+    setIsFetchingSession(true);
     try {
       await pay(sessionId);
       setPaymentStatus('Payment successful');
@@ -57,7 +56,7 @@ function BookDetails({ userId }) {
       setPaymentStatus('Payment failed');
     } finally {
       setIsProcessing(false);
-      setShowBackdrop(false); // Hide the backdrop once processing is done
+      setIsFetchingSession(false);
     }
   };
 
@@ -100,7 +99,7 @@ function BookDetails({ userId }) {
 
   return (
     <>
-      {showBackdrop && (
+      {isFetchingSession && (
         <div className="backdrop">
           <ClipLoader size={35} />
         </div>
@@ -162,10 +161,8 @@ function BookDetails({ userId }) {
                   setSessionId={setSessionId}
                   setOrderId={setOrderId}
                   setUserDetails={handleSetUserDetails}
-                  onSuccess={handlePaymentSuccess}
-                  onError={handlePaymentError}
+                  setIsFetchingSession={setIsFetchingSession} // Pass the function to control the backdrop
                   className="mt-4"
-                  onRendered={() => setShowBackdrop(false)} // Hide backdrop when rendered
                 />
               )
             )}
