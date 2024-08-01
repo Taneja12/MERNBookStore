@@ -4,7 +4,7 @@ import { fetchBookDetails, createOrder } from '../services/api';
 import pay from '../Payments/pay';
 import PaymentComponent from '../components/PaymentComponent';
 import AddToCartButton from '../components/AddToCartButton';
-import { Container, Row, Col, Image, Form, Card, Spinner, Alert, Button, Modal } from 'react-bootstrap';
+import { Container, Row, Col, Image, Form, Card, Spinner, Alert, Button } from 'react-bootstrap';
 import { ClipLoader } from 'react-spinners';
 import '../css/BookDetail.css';
 
@@ -23,7 +23,6 @@ function BookDetails({ userId }) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [isFetchingSession, setIsFetchingSession] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // Add loading state
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -47,8 +46,6 @@ function BookDetails({ userId }) {
 
   const handlePayment = async () => {
     setIsProcessing(true);
-    setIsLoading(true); // Start loading
-
     try {
       await pay(sessionId);
       setPaymentStatus('Payment successful');
@@ -58,7 +55,6 @@ function BookDetails({ userId }) {
       setPaymentStatus('Payment failed');
     } finally {
       setIsProcessing(false);
-      setIsLoading(false); // End loading
     }
   };
 
@@ -181,12 +177,6 @@ function BookDetails({ userId }) {
           </div>
         </Col>
       </Row>
-      <Modal show={isLoading} backdrop="static" keyboard={false} centered>
-        <Modal.Body className="text-center">
-          <Spinner animation="border" />
-          <p>Loading...</p>
-        </Modal.Body>
-      </Modal>
     </Container>
   );
 }
