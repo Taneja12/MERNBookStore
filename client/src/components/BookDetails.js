@@ -4,7 +4,7 @@ import { fetchBookDetails, createOrder } from '../services/api';
 import pay from '../Payments/pay';
 import PaymentComponent from '../components/PaymentComponent';
 import AddToCartButton from '../components/AddToCartButton';
-import { Container, Row, Col, Image, Form, Card, Spinner, Alert, Button, Modal } from 'react-bootstrap';
+import { Container, Row, Col, Image, Form, Card, Spinner, Alert, Button } from 'react-bootstrap';
 import { ClipLoader } from 'react-spinners';
 import '../css/BookDetail.css';
 
@@ -23,6 +23,7 @@ function BookDetails({ userId }) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [isFetchingSession, setIsFetchingSession] = useState(false);
+  const [showBackdrop, setShowBackdrop] = useState(false);
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -45,6 +46,7 @@ function BookDetails({ userId }) {
   };
 
   const handlePayment = async () => {
+    setShowBackdrop(true); // Show the backdrop when payment starts
     setIsProcessing(true);
     try {
       await pay(sessionId);
@@ -55,6 +57,7 @@ function BookDetails({ userId }) {
       setPaymentStatus('Payment failed');
     } finally {
       setIsProcessing(false);
+      setShowBackdrop(false); // Hide the backdrop once processing is done
     }
   };
 
@@ -96,92 +99,112 @@ function BookDetails({ userId }) {
   const showReadMore = showDescription && book.description.length > 500;
 
   return (
-    <Container className="my-4">
-      <Row className="bg-dark text-white rounded p-4">
-        <Col md={3} className="text-center">
-          <Image src={book.imageUrl} alt={book.title} fluid rounded />
-        </Col>
-        <Col md={6}>
-          <h2>{book.title}</h2>
-          <p><strong>Author:</strong> {book.author}</p>
-          <p><strong>Genre:</strong> {book.category}</p>
-          <hr />
-          <div className={`description ${expanded ? 'expanded' : ''}`}>
-            <p>{expanded ? book.description : `${book.description.substring(0, 800)}...`}</p>
-          </div>
-          {showReadMore && (
-            <Button variant="link" onClick={toggleDescription}>
-              {expanded ? 'Read less' : 'Read more'}
-            </Button>
-          )}
-          <p><strong>Price:</strong> ₹ {book.price}</p>
-          <Form.Group as={Row} className="align-items-center">
-            <Form.Label column sm="3">Quantity:</Form.Label>
-            <Col sm="3">
-              <Form.Control as="select" value={quantity} onChange={handleQuantityChange}>
-                {[...Array(10).keys()].map((i) => (
-                  <option key={i + 1} value={i + 1}>{i + 1}</option>
-                ))}
-              </Form.Control>
-            </Col>
-          </Form.Group>
-        </Col>
-        <Col md={3}>
-          {showUserDetails && (
-            <Card className="mt-4">
-              <Card.Header>User Details</Card.Header>
-              <Card.Body>
-                <Card.Text><strong>Username:</strong> {userDetails?.customerName}</Card.Text>
-                <Card.Text><strong>Email:</strong> {userDetails?.customerEmail}</Card.Text>
-                <Card.Text><strong>Phone:</strong> {userDetails?.customerPhone}</Card.Text>
-              </Card.Body>
-            </Card>
-          )}
-          {paymentStatus && <Alert variant={paymentStatus === 'Payment successful' ? 'success' : 'danger'}>{paymentStatus}</Alert>}
-          {isProcessing ? (
-            <Modal show={isProcessing} centered backdrop="static">
-              <Modal.Body className="text-center">
-                <ClipLoader size={50} /> {/* Larger spinner */}
-                <p className="mt-3">Processing your payment...</p>
-              </Modal.Body>
-            </Modal>
-          ) : sessionId ? (
-            <Button variant="success" onClick={handlePayment} className="btn-block mt-4">Proceed to Payment</Button>
-          ) : (
-            isFetchingSession ? (
-              <ClipLoader size={35} className="mt-4" />
-            ) : (
-              <PaymentComponent
-                userId={userId}
-                cartItems={[{ bookId: book._id, quantity, bookPrice: book.price }]}
-                totalAmount={quantity * book.price}
-                setSessionId={setSessionId}
-                setOrderId={setOrderId}
-                setUserDetails={handleSetUserDetails}
-                onSuccess={handlePaymentSuccess}
-                onError={handlePaymentError}
-                className="mt-4"
-              />
-            )
-          )}
-          <div className="mt-4">
-            {isAddingToCart ? (
-              <ClipLoader size={35} />
-            ) : (
-              <AddToCartButton
-                userId={userId}
-                bookId={book._id}
-                quantity={quantity}
-                onSuccess={handleAddToCartSuccess}
-                onError={handleAddToCartError}
-                className="btn btn-secondary btn-block"
-                onClick={handleAddToCartClick}
-              />
+    <>
+      {showBackdrop && (
+        <div className="backdrop">
+          <ClipLoader size={35} />
+        </div>
+      )}
+      <Container className="my-4">
+        <Row className="bg-dark text-white rounded p-4">
+          <Col md={3} className="text-center">
+            <Image src={book.imageUrl} alt={book.title} fluid rounded />
+          </Col>
+          <Col md={6}>
+            <h2>{book.title}</h2>
+            <p><strong>Author:</strong> {book.author}</p>
+            <p><strong>Genre:</strong> {book.category}</p>
+            <hr />
+            <div className={`description ${expanded ? 'expanded' : ''}`}>
+              <p>{expanded ? book.description : `${book.description.substring(0, 800)}...`}</p>
+            </div>
+            {showReadMore && (
+              <Button variant="link" onClick={toggleDescription}>
+                {expanded ? 'Read less' : 'Read more'}
+              </Button>
             )}
-          </div>
-        </Col>
-      </Row>
-    </Container>
+            <p><strong>Price:</strong> ₹ {book.price}</p>
+            <Form.Group as={Row} className="align-items-center">
+              <Form.Label column sm="3">Quantity:</Form.Label>
+              <Col sm="3">
+                <Form.Control as="select" value={quantity} onChange={handleQuantityChange}>
+                  {[...Array(10).keys()].map((i) => (
+                    <option key={i + 1} value={i + 1}>{i + 1}</option>
+                  ))}
+                </Form.Control>
+              </Col>
+            </Form.Group>
+          </Col>
+          <Col md={3}>
+            {showUserDetails && (
+              <Card className="mt-4">
+                <Card.Header>User Details</Card.Header>
+                <Card.Body>
+                  <Card.Text><strong>Username:</strong> {userDetails?.customerName}</Card.Text>
+                  <Card.Text><strong>Email:</strong> {userDetails?.customerEmail}</Card.Text>
+                  <Card.Text><strong>Phone:</strong> {userDetails?.customerPhone}</Card.Text>
+                </Card.Body>
+              </Card>
+            )}
+            {paymentStatus && <Alert variant={paymentStatus === 'Payment successful' ? 'success' : 'danger'}>{paymentStatus}</Alert>}
+            {isProcessing ? (
+              <ClipLoader size={35} />
+            ) : sessionId ? (
+              <Button variant="success" onClick={handlePayment} className="btn-block mt-4">Proceed to Payment</Button>
+            ) : (
+              isFetchingSession ? (
+                <ClipLoader size={35} className="mt-4" />
+              ) : (
+                <PaymentComponent
+                  userId={userId}
+                  cartItems={[{ bookId: book._id, quantity, bookPrice: book.price }]}
+                  totalAmount={quantity * book.price}
+                  setSessionId={setSessionId}
+                  setOrderId={setOrderId}
+                  setUserDetails={handleSetUserDetails}
+                  onSuccess={handlePaymentSuccess}
+                  onError={handlePaymentError}
+                  className="mt-4"
+                  onRendered={() => setShowBackdrop(false)} // Hide backdrop when rendered
+                />
+              )
+            )}
+            <div className="mt-4">
+              {isAddingToCart ? (
+                <ClipLoader size={35} />
+              ) : (
+                <AddToCartButton
+                  userId={userId}
+                  bookId={book._id}
+                  quantity={quantity}
+                  onSuccess={handleAddToCartSuccess}
+                  onError={handleAddToCartError}
+                  className="btn btn-secondary btn-block"
+                  onClick={handleAddToCartClick}
+                />
+              )}
+            </div>
+          </Col>
+        </Row>
+      </Container>
+      <style>
+        {`
+          .backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999; /* Ensure it's on top of other content */
+            backdrop-filter: blur(5px); /* Apply blur effect */
+          }
+        `}
+      </style>
+    </>
   );
 }
 
