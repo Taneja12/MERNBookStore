@@ -10,7 +10,7 @@ const Cart = ({ userId }) => {
   const [error, setError] = useState(null);
   const [paymentStatus, setPaymentStatus] = useState(null);
   const [sessionId, setSessionId] = useState(null);
-  const [orderId, setOrderId] = useState(null);
+  const [OrderId, setOrderId] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
 
   useEffect(() => {
@@ -53,17 +53,17 @@ const Cart = ({ userId }) => {
     try {
       await pay(sessionId); // Assume this handles payment processing
       setPaymentStatus('Payment successful');
-
+  
       // Create order after successful payment
-      await createOrder(sessionId, userId, cartItems, orderId);
-
+      await createOrder(sessionId, userId, cartItems, OrderId);
+  
       // Remove items from the cart after successful order placement
       await Promise.all(
         cartItems.map(async (item) => {
           await removeCartItem(userId, item.bookId);
         })
       );
-
+  
       // Clear the cart state
       setCartItems([]);
     } catch (error) {
@@ -71,6 +71,7 @@ const Cart = ({ userId }) => {
       setPaymentStatus('Payment failed');
     }
   };
+  
 
   const handleSetUserDetails = (details) => {
     setUserDetails(details);
