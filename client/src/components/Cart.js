@@ -10,7 +10,7 @@ const Cart = ({ userId }) => {
   const [error, setError] = useState(null);
   const [paymentStatus, setPaymentStatus] = useState(null);
   const [sessionId, setSessionId] = useState(null);
-  const [OrderId, setOrderId] = useState(null);
+  const [orderId, setOrderId] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
 
   useEffect(() => {
@@ -55,11 +55,14 @@ const Cart = ({ userId }) => {
       setPaymentStatus('Payment successful');
 
       // Create order after successful payment
-      await createOrder(sessionId, userId, cartItems, OrderId);
+      await createOrder(sessionId, userId, cartItems, orderId);
+
       // Remove items from the cart after successful order placement
-      cartItems.forEach(async (item) => {
-        await removeCartItem(userId, item.bookId);
-      });
+      await Promise.all(
+        cartItems.map(async (item) => {
+          await removeCartItem(userId, item.bookId);
+        })
+      );
 
       // Clear the cart state
       setCartItems([]);
