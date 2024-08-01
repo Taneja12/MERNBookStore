@@ -1,21 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchUserDetails, OrderCreation } from '../services/api';
-import { Button, Spinner } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
-const PaymentComponent = ({ 
-  userId, 
-  cartItems, 
-  totalAmount, 
-  setSessionId, 
-  setOrderId, 
-  setUserDetails, 
-  setIsFetchingSession 
-}) => {
+const PaymentComponent = ({ userId, cartItems, totalAmount, setSessionId,setOrderId, setUserDetails }) => {
   const [userEmail, setUserEmail] = useState(null);
   const [userPhone, setUserPhone] = useState(null);
   const [userName, setUserName] = useState(null);
-  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,16 +18,14 @@ const PaymentComponent = ({
           setUserEmail(userDetails.email);
           setUserPhone(userDetails.phone);
           setUserName(userDetails.username);
-          setLoading(false); // Set loading to false after data is fetched
         } catch (error) {
           console.error('Error fetching user details:', error);
-          setLoading(false); // Set loading to false on error
         }
       };
 
       getUserDetails();
     }
-  }, [navigate]);
+  }, []);
 
   const handlePayment = async () => {
     const token = localStorage.getItem('token');
@@ -78,22 +67,14 @@ const PaymentComponent = ({
   };
 
   return (
-    <>
-      {loading ? (
-        <div className="backdrop">
-          <Spinner animation="border" />
-        </div>
-      ) : (
-        <Button 
-          variant="primary" 
-          onClick={handlePayment} 
-          className="btn-block" 
-          style={{textTransform: "none"}}
-        >
-          Buy Now
-        </Button>
-      )}
-    </>
+    <Button 
+      variant="primary" 
+      onClick={handlePayment} 
+      className="btn-block" 
+      style={{textTransform : "none" }}
+    >
+      Buy Now
+    </Button>
   );
 };
 
