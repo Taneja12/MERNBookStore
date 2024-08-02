@@ -114,13 +114,13 @@ body {
   }
 
   .search-form .form-control {
-    width: 150px;
+    width: 200px;
   }
 }
 
 @media screen and (max-width: 480px) {
   .search-form .form-control {
-    width: 100px;
+    width: 150px;
   }
 
   .navbar-nav .nav-link {
