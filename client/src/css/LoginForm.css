@@ -1,5 +1,3 @@
-/* src/css/LoginForm.css */
-
 /* Reset body margin and padding, set global font and background size */
 body {
   margin: 0;
@@ -13,7 +11,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 67.2vh; /* Full viewport height */
+  min-height: 80.2vh; /* Full viewport height */
   padding: 0 1rem;
 }
 
@@ -24,7 +22,7 @@ body {
   padding: 2rem;
   background-color: rgba(8, 8, 8, 0.8); /* Black background for form */
   border-radius: 8px; /* Rounded corners */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Enhanced shadow for depth */
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Enhanced shadow for depth */
   box-sizing: border-box;
   color: #fff; /* White text */
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; /* Add transitions */
@@ -127,4 +125,24 @@ h1 {
 /* Inline display for register text */
 .register-text {
   display: inline;
+}
+/* Container for the "or" text with a divider line */
+.or-container {
+  display: flex;
+  align-items: center;
+  margin: 20px 0; /* Space above and below the "or" text */
+}
+
+/* Style for the "or" text */
+.or-text {
+  color: #ccc; /* Light gray color for the "or" text */
+  font-size: 1rem; /* Font size for the "or" text */
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  margin: 0 15px; /* Spacing around the "or" text */
+}
+
+/* Divider line styles */
+.divider {
+  flex: 1;
+  border-top: 1px solid #ccc; /* Light gray line */
 }

@@ -7,7 +7,6 @@ import 'aos/dist/aos.css';
 import '../css/LoginForm.css';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
-
 const LoginForm = ({ setIsAuthenticated }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -95,6 +94,13 @@ const LoginForm = ({ setIsAuthenticated }) => {
           </Button>
         </Form>
         {error && <Alert variant="danger" className="error-message">{error}</Alert>}
+        
+        <div className="or-container">
+          <div className="divider"></div>
+          <span className="or-text">or</span>
+          <div className="divider"></div>
+        </div>
+        
         <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
           <GoogleLogin
             onSuccess={handleGoogleSuccess}
@@ -102,6 +108,7 @@ const LoginForm = ({ setIsAuthenticated }) => {
             cookiePolicy={'single_host_origin'}
           />
         </GoogleOAuthProvider>
+
         <div className="links-container">
           <div className="forgot-password">
             <a href="/forgot-password" className="forgot-password-link">Forgot your password?</a>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Form, Button, Alert } from 'react-bootstrap';
 import { registerUser, googleSignup } from '../services/api'; // Import the registerUser and googleSignup functions
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import '../css/RegisterForm.css';
@@ -63,58 +64,81 @@ const RegisterForm = ({ setIsAuthenticated }) => {
   };
 
   return (
-    <div className="register-form-container">
-      <h1>Register</h1>
-      {error && <div className="error-message">{error}</div>}
-      <form className="form" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Username"
-          name="username"
-          value={username}
-          onChange={handleChange}
-          className="input"
-          required
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          name="email"
-          value={email}
-          onChange={handleChange}
-          className="input"
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          name="password"
-          value={password}
-          onChange={handleChange}
-          className="input"
-          minLength="6"
-          required
-        />
-        <input
-          type="text"
-          placeholder="Customer Phone"
-          name="phone"
-          value={phone}
-          onChange={handleChange}
-          className="input"
-          required
-        />
-        <button type="submit" className="button">Register</button>
-      </form>
+    <div className="form-container">
+      <div className="form-wrapper">
+        <h1>Register</h1>
+        {error && <div className="error-message">{error}</div>}
+        <Form onSubmit={handleSubmit}>
+          <Form.Group controlId="formUsername">
+            <Form.Control
+              type="text"
+              placeholder="Username"
+              name="username"
+              value={username}
+              onChange={handleChange}
+              className="input-field"
+              required
+            />
+          </Form.Group>
+          <Form.Group controlId="formEmail">
+            <Form.Control
+              type="email"
+              placeholder="Email"
+              name="email"
+              value={email}
+              onChange={handleChange}
+              className="input-field"
+              required
+            />
+          </Form.Group>
+          <Form.Group controlId="formPassword">
+            <Form.Control
+              type="password"
+              placeholder="Password"
+              name="password"
+              value={password}
+              onChange={handleChange}
+              className="input-field"
+              minLength="6"
+              required
+            />
+          </Form.Group>
+          <Form.Group controlId="formPhone">
+            <Form.Control
+              type="text"
+              placeholder="Customer Phone"
+              name="phone"
+              value={phone}
+              onChange={handleChange}
+              className="input-field"
+              required
+            />
+          </Form.Group>
+          <Button type="submit" className="button1" variant="primary">Register</Button>
+        </Form>
 
-      <div className="google-signup">
-        <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
-          <GoogleLogin
-            onSuccess={handleGoogleSuccess}
-            onFailure={handleGoogleFailure}
-            cookiePolicy={'single_host_origin'}
-          />
-        </GoogleOAuthProvider>
+        <div className="or-container">
+          <div className="divider"></div>
+          <span className="or-text">or</span>
+          <div className="divider"></div>
+        </div>
+
+        <div className="google-signup">
+          <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onFailure={handleGoogleFailure}
+              cookiePolicy={'single_host_origin'}
+            />
+          </GoogleOAuthProvider>
+        </div>
+
+        <div className="links-container">
+        <div className="login-link">
+            <p className="register-text">Already have an account? </p>
+            <a href="/register" className="register-link-text">Login</a>
+          </div>
+        </div>
       </div>
     </div>
   );
