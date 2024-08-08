@@ -29,6 +29,7 @@ const OrderSection = ({ orders }) => {
                         <div className="item-info">
                           <p className="book-title">{item.bookId.title}</p>
                           <p>Quantity: {item.quantity}</p>
+                          <p>Payment Status: {order.paymentStatus}</p>
                         </div>
                       </div>
                     </li>
