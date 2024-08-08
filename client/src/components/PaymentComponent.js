@@ -44,7 +44,7 @@ const PaymentComponent = ({ userId, cartItems, totalAmount, setSessionId, setOrd
         customer_id: userId,
         customerName: userName,
         customerEmail: userEmail,
-        customerPhone: String(userPhone),
+        customerPhone:  String(userPhone),
         cartItems: cartItems.map(item => ({
           bookId: item.bookId,
           quantity: item.quantity,

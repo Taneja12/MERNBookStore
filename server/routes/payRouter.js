@@ -14,6 +14,7 @@ const CF_SECRET_KEY = process.env.CF_SECRET_KEY;
 router.post('/createOrder', async (req, res) => {
   try {
     const { orderId, orderAmount, customer_id, customerName, customerEmail, customerPhone } = req.body;
+    console.log({ orderId, orderAmount, customer_id, customerName, customerEmail, customerPhone });
     const orderData = {
       customer_details: {
         customer_id,

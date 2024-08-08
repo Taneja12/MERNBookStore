@@ -3,9 +3,11 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
+const passport = require('passport');
 const nodemailer = require('nodemailer');
 const User = require('../models/User');
 const authMiddleware = require('../middleware/authMiddleware');
+const { verifyGoogleToken } = require('../controllers/authController');
 require('dotenv').config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -197,5 +199,59 @@ router.post('/reset-password', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
+router.get('/google', passport.authenticate('google', {
+  scope: ['profile', 'email']
+}));
+
+router.post('/google', verifyGoogleToken);
+
+router.get('/google/callback', passport.authenticate('google', {
+  failureRedirect: '/',
+  session: true
+}), async (req, res) => {
+  try {
+    const user = req.user;
+
+    // Create JWT Token
+    const token = jwt.sign(
+      { userId: user._id, username: user.username },
+      JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    res.redirect(`http://localhost:3000?token=${token}`);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
+// Route: POST /api/auth/update-phone
+router.post('/update-phone', async (req, res) => {
+  const { userId, phone } = req.body;
+
+  try {
+    // Update the user's phone number
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { phone: phone },
+      { new: true } // Return the updated user
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Generate a new token if needed
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    res.json({ token });
+  } catch (error) {
+    console.error('Error updating phone number:', error);
+    res.status(500).json({ message: 'Error updating phone number' });
+  }
+});
+
 
 module.exports = router;

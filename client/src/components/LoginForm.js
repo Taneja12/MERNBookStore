@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { loginUser } from '../services/api'; // Import the service function
+import { loginUser } from '../services/api';
 import { Form, Button, Alert } from 'react-bootstrap';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import '../css/LoginForm.css'; // Import CSS file
+import '../css/LoginForm.css';
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
 const LoginForm = ({ setIsAuthenticated }) => {
   const [username, setUsername] = useState('');
@@ -27,21 +28,54 @@ const LoginForm = ({ setIsAuthenticated }) => {
       const data = await loginUser(username, password);
       localStorage.setItem('token', data.token);
       setIsAuthenticated(true);
-      // Redirect to home page after successful login
       navigate('/');
-      window.location.reload(); // Reload the page to load the userId
+      window.location.reload();
     } catch (error) {
       if (error.response) {
         console.error('Login error:', error.response.data.message);
-        setError(error.response.data.message); // Set specific error message
+        setError(error.response.data.message);
       } else if (error.request) {
         console.error('No response received:', error.request);
-        setError('No response received'); // Set general error message
+        setError('No response received');
       } else {
         console.error('Error:', error.message);
-        setError('Error during request'); // Set general error message
+        setError('Error during request');
       }
     }
+  };
+
+  const handleGoogleSuccess = (response) => {
+    console.log('Google Login Success:', response);
+    fetch('http://localhost:5000/api/auth/google', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        idToken: response.credential // Ensure this field matches the token field in your response
+      })
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        localStorage.setItem('token', data.token);
+        setIsAuthenticated(true);
+        navigate('/');
+      })
+      .catch(error => {
+        console.error('Error during authentication:', error);
+        setError('Google login failed. Please try again.');
+      });
+  };
+  
+
+  const handleGoogleFailure = (error) => {
+    console.error('Google Login Failed:', error);
+    setError('Google login failed. Please try again.');
   };
 
   return (
@@ -75,6 +109,13 @@ const LoginForm = ({ setIsAuthenticated }) => {
           </Button>
         </Form>
         {error && <Alert variant="danger" className="error-message">{error}</Alert>}
+        <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onFailure={handleGoogleFailure}
+            cookiePolicy={'single_host_origin'}
+          />
+        </GoogleOAuthProvider>
         <div className="links-container">
           <div className="forgot-password">
             <a href="/forgot-password" className="forgot-password-link">Forgot your password?</a>

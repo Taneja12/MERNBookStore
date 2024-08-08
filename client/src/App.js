@@ -19,6 +19,7 @@ import ContactUs from './components/ContactUs';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
 import Footer from './components/Footer'; // Import the Footer component
+import EnterField from './components/EnterField';
 import { fetchUserDetails } from './services/api';
 import {jwtDecode} from 'jwt-decode';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -91,12 +92,14 @@ function App() {
             <Route path="/category/:categoryName" element={<CategoryPage />} />
             <Route path="/payment" element={<PaymentComponent />} />
             <Route path="/user" element={<UserProfile />} />
+            <Route path="/enter-phone" element={<EnterField />} />
             <Route path='/cart' element={<Cart userId={userId} />} />
             <Route path='/orders' element={<OrderList userId={userId} />} />
             <Route path="/admin" element={isAuthenticated && isAdmin ? <AdminDashboard /> : <Navigate to="/login" />} />
             <Route path="/contact" element={<ContactUs />} />
             <Route path="/forgot-password" element={isAuthenticated ? <Navigate to="/" />:<ForgotPassword />  }  />
             <Route path="/reset-password/:token" element={isAuthenticated ? <Navigate to="/" />:<ResetPassword /> } />
+            
           </Routes>
         </div>
         <Footer /> {/* Add Footer component here */}
