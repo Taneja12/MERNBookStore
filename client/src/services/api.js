@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const BASE_URL ="https://mern-book-store-deepanshu-tanejas-projects.vercel.app"; // Use the production base URL
-// const BASE_URL = "http://localhost:5000"
+// const BASE_URL ="https://mern-book-store-deepanshu-tanejas-projects.vercel.app"; // Use the production base URL
+const BASE_URL = "http://localhost:5000"
 
 
 export const fetchBooks = async ({ page = 1, pageSize = 10 } = {}) => {

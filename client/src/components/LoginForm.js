@@ -7,6 +7,9 @@ import 'aos/dist/aos.css';
 import '../css/LoginForm.css';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
+const BASE_URL ="https://mern-book-store-deepanshu-tanejas-projects.vercel.app"; // Use the production base URL
+// const BASE_URL = "http://localhost:5000"
+
 const LoginForm = ({ setIsAuthenticated }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -46,7 +49,7 @@ const LoginForm = ({ setIsAuthenticated }) => {
 
   const handleGoogleSuccess = (response) => {
     console.log('Google Login Success:', response);
-    fetch('http://localhost:5000/api/auth/google', {
+    fetch(`${BASE_URL}/api/auth/google`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
