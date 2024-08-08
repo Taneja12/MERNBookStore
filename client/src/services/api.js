@@ -4,7 +4,7 @@ const BASE_URL ="https://mern-book-store-deepanshu-tanejas-projects.vercel.app";
 // const BASE_URL = "http://localhost:5000"
 
 
-export const fetchBooks = async ({ page = 1, pageSize = 10 } = {}) => {
+export const fetchBooks = async ({ page = 1, pageSize = 60 } = {}) => {
   try {
     const response = await axios.get(`${BASE_URL}/api/books`, {
       params: { page, pageSize }
@@ -73,6 +73,18 @@ export const loginUser = async (username, password) => {
     throw error;
   }
 };
+
+export const googleLogin = async (idToken) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/api/auth/google`, {
+      idToken,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const registerUser = async (userData) => {
   try {
     const response = await axios.post(`${BASE_URL}/api/auth/register`, userData, {
@@ -84,6 +96,15 @@ export const registerUser = async (userData) => {
   } catch (error) {
     console.error('Error during user registration:', error.response?.data || error.message);
     throw error; // Rethrow to handle further up the chain
+  }
+};
+
+export const googleSignup = async (idToken) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/api/auth/google/signup`, { idToken });
+    return response.data;
+  } catch (error) {
+    throw error;
   }
 };
 
@@ -208,6 +229,15 @@ export const fetchAllOrders = async () => {
   }
 };
 
+export const addBook = async (book) => {
+  const response = await fetch(`${BASE_URL}/api/books`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(book),
+  });
+  return response.json();
+};
+
 export const sendContactMessage = async (formData) => {
   try {
     const response = await axios.post(`${BASE_URL}/api/contact`, formData);
@@ -247,3 +277,14 @@ export const resetPassword = async (token, newPassword) => {
     throw error;
   }
 };
+
+export const updatePhoneNumber = async (phone, token) => {
+  const response = await axios.post(
+    `${BASE_URL}/api/auth/update-phone`,
+    { phone },
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  return response.data;
+};
+
+

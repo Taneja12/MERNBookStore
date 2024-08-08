@@ -1,19 +1,20 @@
-// src/components/AdminDashboard.js
 import React, { useEffect, useState } from 'react';
-import { fetchBooks, fetchAllUsers, fetchAllOrders, fetchContactMessages } from '../services/api';
+import { fetchBooks, fetchAllUsers, fetchAllOrders, fetchContactMessages } from '../services/api'; 
 import Book from './Book';
 import OrderSection from './OrderSection';
-import OrderChart from './OrderChart'; // Import the new OrderChart component
-import ContactMessages from '../components/Contact'; // Import the new ContactMessages component
+import OrderChart from './OrderChart'; 
+import ContactMessages from '../components/Contact'; 
+import AdminPage from './Admin'; 
 import '../css/AdminDashboard.css';
 
 function AdminDashboard() {
   const [books, setBooks] = useState([]);
   const [users, setUsers] = useState([]);
   const [orders, setOrders] = useState([]);
-  const [contacts, setContacts] = useState([]); // Add state for contacts
+  const [contacts, setContacts] = useState([]); 
   const [error, setError] = useState(null);
   const [activeSection, setActiveSection] = useState('books');
+  const [showAddBookForm, setShowAddBookForm] = useState(false); 
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,12 +22,12 @@ function AdminDashboard() {
         const booksData = await fetchBooks();
         const usersData = await fetchAllUsers();
         const ordersData = await fetchAllOrders();
-        const contactsData = await fetchContactMessages(); // Fetch contact messages
+        const contactsData = await fetchContactMessages(); 
 
         setBooks(booksData.books || booksData);
         setUsers(usersData);
         setOrders(ordersData);
-        setContacts(contactsData); // Set contacts data
+        setContacts(contactsData); 
       } catch (error) {
         setError('Error fetching data');
         console.error('Error fetching admin dashboard data:', error);
@@ -36,12 +37,33 @@ function AdminDashboard() {
     fetchData();
   }, []);
 
+  const handleAddBook = async () => {
+    try {
+      const booksData = await fetchBooks(); 
+      setBooks(booksData.books || booksData);
+      setShowAddBookForm(false); // Hide the Add Book form after adding a book
+    } catch (error) {
+      setError('Error fetching books');
+      console.error('Error fetching books after adding a new book:', error);
+    }
+  };
+
+  const toggleAddBookForm = () => {
+    setShowAddBookForm(prevState => !prevState); // Toggle the form visibility
+  };
+
   const renderContent = () => {
     switch (activeSection) {
       case 'books':
         return (
           <div className="section">
             <h2 style={{color:"black"}}>Books</h2>
+            <button onClick={toggleAddBookForm} className="add-book-button">
+              {showAddBookForm ? 'Close Form' : 'Add New Book'}
+            </button>
+            {showAddBookForm && (
+              <AdminPage onAdd={handleAddBook} />
+            )}
             {Array.isArray(books) && books.length > 0 ? (
               <div className="books-container">
                 {books.map((book) => (
@@ -59,7 +81,7 @@ function AdminDashboard() {
             <h2 style={{color:"black"}}>Users</h2>
             {Array.isArray(users) && users.length > 0 ? (
               <ul className="user-list">
-                {users.filter(user => user.role !== 'admin').map((user) => ( // Filter out admin users
+                {users.filter(user => user.role !== 'admin').map((user) => (
                   <li key={user._id} className="user-item">
                     <div className="user-details">
                       <h3>{user.username}</h3>
@@ -77,11 +99,11 @@ function AdminDashboard() {
       case 'orders':
         return (
           <div className="section">
-            <OrderChart orders={orders} /> {/* Use the OrderChart component */}
+            <OrderChart orders={orders} />
             <OrderSection orders={orders} />
           </div>
         );
-      case 'contacts': // Add a new case for contacts
+      case 'contacts':
         return (
           <div className="section">
             <ContactMessages contacts={contacts} />

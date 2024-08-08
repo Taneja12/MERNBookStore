@@ -1,0 +1,43 @@
+/* EnterPhoneNumber.css */
+
+.enter-phone-container {
+  background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+  border-radius: 12px; /* Rounded corners */
+  padding: 20px; /* Padding inside the box */
+  margin: 20px auto; /* Center the box horizontally */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Larger shadow for depth */
+  max-width: 400px; /* Limit the width of the box */
+  text-align: left; /* Align text to the left */
+  font-family: 'Arial', sans-serif; /* Use a clean, modern font */
+  color: #333; /* Darker text color for better readability */
+}
+
+.enter-phone-container h3 {
+  margin-top: 0;
+  font-size: 1.8rem; /* Slightly larger font size for the heading */
+  font-family: 'Helvetica Neue', Arial, sans-serif; /* Example font change */
+  color: black; /* Black color for the heading */
+  border-bottom: 2px solid black; /* Border under the heading */
+  padding-bottom: 5px; /* Padding below the heading */
+}
+
+.error-message {
+  color: #dc3545; /* Red color for error messages */
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.input {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+

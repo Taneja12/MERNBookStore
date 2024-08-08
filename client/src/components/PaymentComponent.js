@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchUserDetails, OrderCreation } from '../services/api';
 import { Button, Spinner } from 'react-bootstrap';
+import EnterPhoneNumber from './EnterField'; // Import the EnterPhoneNumber component
 
 const PaymentComponent = ({ userId, cartItems, totalAmount, setSessionId, setOrderId, setUserDetails }) => {
   const [userEmail, setUserEmail] = useState(null);
   const [userPhone, setUserPhone] = useState(null);
   const [userName, setUserName] = useState(null);
-  const [loading, setLoading] = useState(false); // Added loading state
+  const [loading, setLoading] = useState(false);
+  const [showEnterPhone, setShowEnterPhone] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,7 +30,16 @@ const PaymentComponent = ({ userId, cartItems, totalAmount, setSessionId, setOrd
     }
   }, []);
 
-  const handlePayment = async () => {
+  const handlePayment = () => {
+    if (!userPhone) {
+      setShowEnterPhone(true); // Show EnterPhoneNumber component if phone number is missing
+      return;
+    }
+
+    processPayment(); // Proceed with payment if phone number exists
+  };
+
+  const processPayment = async () => {
     const token = localStorage.getItem('token');
     if (!token) {
       navigate('/login', { state: { message: 'Please log in to proceed with the payment.' } });
@@ -44,7 +55,7 @@ const PaymentComponent = ({ userId, cartItems, totalAmount, setSessionId, setOrd
         customer_id: userId,
         customerName: userName,
         customerEmail: userEmail,
-        customerPhone:  String(userPhone),
+        customerPhone: String(userPhone),
         cartItems: cartItems.map(item => ({
           bookId: item.bookId,
           quantity: item.quantity,
@@ -70,6 +81,15 @@ const PaymentComponent = ({ userId, cartItems, totalAmount, setSessionId, setOrd
       setLoading(false); // Set loading to false when payment is complete
     }
   };
+
+  if (showEnterPhone) {
+    return (
+      <EnterPhoneNumber 
+        setPhoneNumber={setUserPhone} 
+        setShowEnterPhone={setShowEnterPhone} 
+      />
+    );
+  }
 
   return (
     <Button 

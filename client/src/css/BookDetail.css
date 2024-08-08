@@ -194,9 +194,6 @@
   max-width: 1200px; /* New maximum width for the entire container */
 }
 
-
-
-
 @media (max-width: 992px) {
   .book-details {
     flex-direction: column;

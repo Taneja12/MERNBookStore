@@ -23,20 +23,16 @@ const verifyGoogleToken = async (req, res) => {
       user = new User({
         username: payload['name'], // Adjust according to your needs
         email: payload['email'],
-        phone: 9999999999, // Set default or null if not provided
         googleId: googleId,
+        profilePicture: payload['picture'],
       });
 
       await user.save();
     }
-
-    // Check if the user's phone number is missing
-    const phoneMissing = !user.phone;
-
     // Generate JWT token using MongoDB user _id
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    res.json({ token, phoneMissing });
+    res.json({ token,user });
   } catch (error) {
     console.error('Error verifying Google token:', error);
     res.status(401).json({ message: 'Invalid Google token' });

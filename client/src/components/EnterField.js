@@ -1,47 +1,42 @@
 import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
+import { updatePhoneNumber } from '../services/api'; // API call to update the phone number
+import '../css/EnterField.css';
 
-const EnterPhoneNumber = () => {
+
+const EnterPhoneNumber = ({ setPhoneNumber }) => {
   const [phone, setPhone] = useState('');
-  const location = useLocation();
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { userId } = location.state;
-
     try {
-      const result = await fetch('http://localhost:5000/api/auth/update-phone', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          userId: userId,
-          phone: phone
-        })
-      });
-
-      const data = await result.json();
-      localStorage.setItem('token', data.token);
-      navigate('/');
-    } catch (error) {
-      console.error('Error updating phone number:', error);
+      const token = localStorage.getItem('token');
+      await updatePhoneNumber({ phone }, token);
+      setPhoneNumber(phone); // Pass the phone number back to PaymentComponent
+      navigate(0); // Navigate to the home page or stay on the current page if needed
+    } catch (err) {
+      console.error(err);
+      setError('Failed to update phone number. Please try again.');
     }
   };
 
   return (
-    <div>
-      <h1>Enter Phone Number</h1>
-      <form onSubmit={handleSubmit}>
+    <div className="enter-phone-container">
+      <h3>Enter Your Phone Number</h3>
+      {error && <div className="error-message">{error}</div>}
+      <form onSubmit={handleSubmit} className="form">
         <input
           type="text"
+          placeholder="Enter phone number"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
-          placeholder="Phone Number"
+          className="input"
           required
         />
-        <button type="submit">Submit</button>
+        <Button type="submit" variant="success" className="btn-block mt-4">Submit</Button>
       </form>
     </div>
   );

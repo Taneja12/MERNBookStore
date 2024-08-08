@@ -82,6 +82,8 @@ router.post('/register', async (req, res) => {
   }
 });
 
+router.post('/google/signup', verifyGoogleToken);
+
 // Route: GET /api/auth/user
 // Fetch user details using authenticated token
 router.get('/user', authMiddleware, async (req, res) => {
@@ -227,29 +229,26 @@ router.get('/google/callback', passport.authenticate('google', {
 });
 
 
-// Route: POST /api/auth/update-phone
-router.post('/update-phone', async (req, res) => {
-  const { userId, phone } = req.body;
+router.post('/update-phone', authMiddleware, async (req, res) => {
+  const { phone } = req.body;
+  const userId = req.user.id; // Assuming `authMiddleware` attaches the user object to req
 
   try {
-    // Update the user's phone number
-    const user = await User.findByIdAndUpdate(
-      userId,
-      { phone: phone },
-      { new: true } // Return the updated user
-    );
+    const user = await User.findById(userId);
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
+    user.phone = phone.phone;
+    await user.save();
 
-    // Generate a new token if needed
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    // Generate a new token with updated user info
+    const token = jwt.sign({ userId: user._id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    res.json({ token });
+    res.json({ message: 'Phone number updated successfully', token });
   } catch (error) {
     console.error('Error updating phone number:', error);
-    res.status(500).json({ message: 'Error updating phone number' });
+    res.status(500).json({ message: 'Server error' });
   }
 });
 

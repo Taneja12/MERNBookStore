@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import '../css/Admin.css'; // Import your CSS file for AdminPage styling
-import { fetchUserDetails } from '../services/api'; // Import fetchUserDetails function
+import '../css/Admin.css';
+import { fetchUserDetails } from '../services/api';
 
-const AdminPage = () => {
+const AdminPage = ({ onAdd }) => { // Accept onAdd as a prop
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [category, setCategory] = useState('');
-  const [error, setError] = useState(null); // State for error handling
-  const [isAdmin, setIsAdmin] = useState(false); // State to check if the user is an admin
+  const [error, setError] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
-  // Define your categories as an array of options
   const categories = [
     'Fiction',
     'Romance',
@@ -21,7 +20,6 @@ const AdminPage = () => {
     'History',
     'Business',
     'Crime'
-    // Add more categories as needed
   ];
 
   useEffect(() => {
@@ -50,12 +48,12 @@ const AdminPage = () => {
         title,
         author,
         description,
-        price: parseFloat(price), // Ensure price is converted to a number
+        price: parseFloat(price),
         imageUrl,
         category,
       }, {
         headers: {
-          'Authorization': `Bearer ${token}` // Send the token in the Authorization header
+          'Authorization': `Bearer ${token}`
         }
       });
 
@@ -66,8 +64,9 @@ const AdminPage = () => {
         setDescription('');
         setPrice('');
         setImageUrl('');
-        setCategory(''); // Clear category state
-        setError(null); // Clear any previous errors
+        setCategory('');
+        setError(null);
+        if (onAdd) onAdd(); // Notify parent component
       } else {
         throw new Error('Failed to add book');
       }

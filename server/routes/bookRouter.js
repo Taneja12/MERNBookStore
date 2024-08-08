@@ -35,7 +35,7 @@ router.get('/', async (req, res) => {
 router.get('/search', async (req, res) => {
   try {
     const { title } = req.query;
-    console.log(title)
+    // console.log(title)
 
     // If title query is not present, return a bad request status
     if (!title) {

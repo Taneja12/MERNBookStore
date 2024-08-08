@@ -35,4 +35,17 @@ router.get('/orders', authMiddleware, async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
+// Create a new book
+router.post('/', async (req, res) => {
+  const { title, author, description, price, imageUrl, category } = req.body;
+  try {
+    const newBook = new Book({ title, author, description, price, imageUrl, category });
+    await newBook.save();
+    res.status(201).json(newBook);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
 module.exports = router;

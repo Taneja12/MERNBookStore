@@ -4,7 +4,7 @@ import { fetchBookDetails, createOrder } from '../services/api';
 import pay from '../Payments/pay';
 import PaymentComponent from '../components/PaymentComponent';
 import AddToCartButton from '../components/AddToCartButton';
-import { Container, Row, Col, Image, Form, Card, Spinner, Alert, Button } from 'react-bootstrap';
+import { Container, Row, Col, Image, Form, Card, Spinner, Button, Alert } from 'react-bootstrap';
 import { ClipLoader } from 'react-spinners';
 import '../css/BookDetail.css';
 
@@ -14,9 +14,8 @@ function BookDetails({ userId }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [expanded, setExpanded] = useState(false);
-  const [paymentStatus, setPaymentStatus] = useState(null);
   const [sessionId, setSessionId] = useState(null);
-  const [OrderId, setOrderId] = useState(null);
+  const [orderId, setOrderId] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [showUserDetails, setShowUserDetails] = useState(false);
@@ -48,11 +47,9 @@ function BookDetails({ userId }) {
     setIsProcessing(true);
     try {
       await pay(sessionId);
-      setPaymentStatus('Payment successful');
-      await createOrder(sessionId, userId, [{ bookId: book._id, quantity, bookPrice: book.price }], OrderId);
+      await createOrder(sessionId, userId, [{ bookId: book._id, quantity, bookPrice: book.price }], orderId);
     } catch (error) {
       console.error('Error processing payment:', error);
-      setPaymentStatus('Payment failed');
     } finally {
       setIsProcessing(false);
     }
@@ -61,14 +58,6 @@ function BookDetails({ userId }) {
   const handleSetUserDetails = (details) => {
     setUserDetails(details);
     setShowUserDetails(true);
-  };
-
-  const handlePaymentSuccess = () => {
-    setPaymentStatus('Payment successful');
-  };
-
-  const handlePaymentError = () => {
-    setPaymentStatus('Payment failed');
   };
 
   const handleAddToCartSuccess = () => {
@@ -137,7 +126,6 @@ function BookDetails({ userId }) {
               </Card.Body>
             </Card>
           )}
-          {paymentStatus && <Alert variant={paymentStatus === 'Payment successful' ? 'success' : 'danger'}>{paymentStatus}</Alert>}
           {isProcessing ? (
             <ClipLoader size={35} />
           ) : sessionId ? (
@@ -153,13 +141,10 @@ function BookDetails({ userId }) {
                 setSessionId={setSessionId}
                 setOrderId={setOrderId}
                 setUserDetails={handleSetUserDetails}
-                onSuccess={handlePaymentSuccess}
-                onError={handlePaymentError}
                 className="mt-4"
               />
             )
           )}
-          {/* {OrderId} */}
           <div className="mt-4">
             {isAddingToCart ? (
               <ClipLoader size={35} />

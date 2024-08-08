@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { loginUser } from '../services/api';
+import { loginUser, googleLogin } from '../services/api';
 import { Form, Button, Alert } from 'react-bootstrap';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import '../css/LoginForm.css';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
-const BASE_URL ="https://mern-book-store-deepanshu-tanejas-projects.vercel.app"; // Use the production base URL
-// const BASE_URL = "http://localhost:5000"
 
 const LoginForm = ({ setIsAuthenticated }) => {
   const [username, setUsername] = useState('');
@@ -47,35 +45,19 @@ const LoginForm = ({ setIsAuthenticated }) => {
     }
   };
 
-  const handleGoogleSuccess = (response) => {
+  const handleGoogleSuccess = async (response) => {
     console.log('Google Login Success:', response);
-    fetch(`${BASE_URL}/api/auth/google`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        idToken: response.credential // Ensure this field matches the token field in your response
-      })
-    })
-      .then(response => {
-        if (!response.ok) {
-          setRedirectMessage('Email ALready Exists');
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        localStorage.setItem('token', data.token);
-        setIsAuthenticated(true);
-        navigate('/');
-      })
-      .catch(error => {
-        console.error('Error during authentication:', error);
-        setError('Google login failed. Please try again.');
-      });
+    try {
+      const data = await googleLogin(response.credential);
+      localStorage.setItem('token', data.token);
+      setIsAuthenticated(true);
+      navigate('/');
+      window.location.reload();
+    } catch (error) {
+      console.error('Error during authentication:', error);
+      setError('Google login failed. Please try again.');
+    }
   };
-  
 
   const handleGoogleFailure = (error) => {
     console.error('Google Login Failed:', error);

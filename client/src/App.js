@@ -24,8 +24,6 @@ import { fetchUserDetails } from './services/api';
 import {jwtDecode} from 'jwt-decode';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
-
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -85,7 +83,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/search" element={<SearchResults />} />
-            <Route path="/register" element={isAuthenticated ? <Navigate to="/" /> : <RegisterForm />} />
+            <Route path="/register" element={isAuthenticated ? <Navigate to="/" /> : <RegisterForm setIsAuthenticated={setIsAuthenticated} />} />
             <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <LoginForm setIsAuthenticated={setIsAuthenticated} />} />
             <Route path="/addbook" element={isAuthenticated && isAdmin ? <AdminPage /> : <Navigate to="/login" />} />
             <Route path="/book/:id" element={<BookDetails userId={userId} />} />
