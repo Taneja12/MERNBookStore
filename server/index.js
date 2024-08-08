@@ -24,8 +24,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // CORS middleware
+if (process.env.NODE_ENV === 'production') {
   app.use(cors(corsOptions)); // Use specific CORS options for production
-  // app.use(cors()); // Allow all origins for development
+} else {
+  app.use(cors()); // Allow all origins for development
+}
 app.options('*', cors(corsOptions)); 
 
 // Session middleware
