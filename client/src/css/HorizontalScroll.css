@@ -1,0 +1,34 @@
+.horizontal-scroll-container {
+  display: flex;
+  align-items: center;
+  overflow: hidden; /* Hide overflow for the container */
+  padding: 20px; /* Optional padding */
+}
+
+.scrollable-content {
+  display: flex; /* Use flexbox for horizontal layout */
+  overflow-x: auto; /* Allow horizontal scrolling */
+  scroll-behavior: smooth; /* Smooth scrolling effect */
+  width: 100%; /* Ensure it takes full width */
+}
+
+.scroll-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 24px; /* Adjust the size as necessary */
+  margin: 0 10px; /* Margin around the buttons */
+}
+
+.scroll-button.left {
+  /* Optional styling for the left button */
+}
+
+.scroll-button.right {
+  /* Optional styling for the right button */
+}
+
+/* Optional: hide scrollbar in some browsers */
+.scrollable-content::-webkit-scrollbar {
+  display: none; /* Hides scrollbar in WebKit browsers */
+}

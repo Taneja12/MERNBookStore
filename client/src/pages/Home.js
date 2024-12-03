@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { fetchBooks } from '../services/api';
 import Book from '../components/Book';
+import HorizontalScroll from '../components/HorizontalScroll';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import '../css/Home.css';
@@ -48,11 +49,11 @@ function Home() {
       </header>
       <div className="book-list-container" data-aos='fade-up'>
         <h2>Explore Our Collection</h2>
-        <div className="book-list">
+        <HorizontalScroll>
           {books.map((book) => (
             <Book key={book._id} book={book} />
           ))}
-        </div>
+        </HorizontalScroll>
         <div className="pagination">
           <button onClick={handlePrevPage} disabled={page === 1} className="pagination-button">
             Previous

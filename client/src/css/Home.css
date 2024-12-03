@@ -112,6 +112,7 @@
   color: #ffffff;
 }
 
+
 @media (min-width: 1200px) {
   .home-header h1 {
     font-size: 100px; /* Larger font size for large screens */
@@ -182,3 +183,5 @@
     font-size: 14px;
   }
 }
+
+
