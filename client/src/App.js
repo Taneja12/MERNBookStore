@@ -18,10 +18,10 @@ import AdminDashboard from './components/AdminDashboard';
 import ContactUs from './components/ContactUs'; 
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
-import Footer from './components/Footer'; // Import the Footer component
+import Footer from './components/Footer';
 import EnterField from './components/EnterField';
 import { fetchUserDetails } from './services/api';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
@@ -31,9 +31,20 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    (function() {
+      const s1 = document.createElement("script");
+      const s0 = document.getElementsByTagName("script")[0];
+      s1.async = true;
+      s1.src = "https://embed.tawk.to/68f3a37193c95d194f3a02f3/1j7rrcto6";
+      s1.charset = "UTF-8";
+      s1.setAttribute("crossorigin", "*");
+      s0.parentNode.insertBefore(s1, s0);
+    })();
+  }, []);
+
+  useEffect(() => {
     const checkToken = async () => {
       const token = localStorage.getItem('token');
-      
       if (token) {
         try {
           const decoded = jwtDecode(token);
@@ -44,12 +55,8 @@ function App() {
           } else {
             setIsAuthenticated(true);
             setUserId(decoded.userId);
-            // Fetch user details if the token is valid
             const user = await fetchUserDetails();
-
-            if (user.role === 'admin') {
-              setIsAdmin(true);
-            }
+            if (user.role === 'admin') setIsAdmin(true);
           }
         } catch (error) {
           console.error('Error decoding token:', error);
@@ -70,9 +77,7 @@ function App() {
     window.location.href = '/';
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  if (loading) return <div>Loading...</div>;
 
   return (
     <AuthProvider>
@@ -91,16 +96,15 @@ function App() {
             <Route path="/payment" element={<PaymentComponent />} />
             <Route path="/user" element={<UserProfile />} />
             <Route path="/enter-phone" element={<EnterField />} />
-            <Route path='/cart' element={<Cart userId={userId} />} />
-            <Route path='/orders' element={<OrderList userId={userId} />} />
+            <Route path="/cart" element={<Cart userId={userId} />} />
+            <Route path="/orders" element={<OrderList userId={userId} />} />
             <Route path="/admin" element={isAuthenticated && isAdmin ? <AdminDashboard /> : <Navigate to="/login" />} />
             <Route path="/contact" element={<ContactUs />} />
-            <Route path="/forgot-password" element={isAuthenticated ? <Navigate to="/" />:<ForgotPassword />  }  />
-            <Route path="/reset-password/:token" element={isAuthenticated ? <Navigate to="/" />:<ResetPassword /> } />
-            
+            <Route path="/forgot-password" element={isAuthenticated ? <Navigate to="/" /> : <ForgotPassword />} />
+            <Route path="/reset-password/:token" element={isAuthenticated ? <Navigate to="/" /> : <ResetPassword />} />
           </Routes>
         </div>
-        <Footer /> {/* Add Footer component here */}
+        <Footer />
       </Router>
     </AuthProvider>
   );
