@@ -33,7 +33,7 @@ app.options('*', cors(corsOptions));
 
 // Session middleware
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'your_secret_key',
+  secret: process.env.SESSION_SECRET || 'key',
   resave: false,
   saveUninitialized: true,
   cookie: { secure: process.env.NODE_ENV === 'production' } // Secure cookies in production
